@@ -7,7 +7,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const mongoose_2 = require("mongoose");
 const sessionSchema = new mongoose_2.Schema({
     username: { type: String },
-    token: { type: JSON }
+    token: { type: String }
 });
 const sessionModel = mongoose_1.default.model("session", sessionSchema);
 exports.default = sessionModel;

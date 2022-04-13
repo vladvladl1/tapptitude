@@ -4,7 +4,7 @@ import {IUser} from "../models/userInterface";
 
 const sessionSchema = new Schema({
     username: {type: String},
-    token: {type: JSON}
+    token: {type: String}
 });
 
 const sessionModel = mongoose.model<IUser>("session", sessionSchema);

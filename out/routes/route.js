@@ -7,10 +7,12 @@ const express_1 = __importDefault(require("express"));
 const userRoute_1 = __importDefault(require("./userRoute"));
 const authRouter_1 = __importDefault(require("./authRouter"));
 const firstRoute_1 = __importDefault(require("./firstRoute"));
+const authAdminRouter_1 = __importDefault(require("./authAdminRouter"));
 const appRoute = (0, express_1.default)();
 appRoute.use(express_1.default.json());
 appRoute.use("/", firstRoute_1.default);
 appRoute.use("/auth", authRouter_1.default);
 appRoute.use("/user", userRoute_1.default);
+appRoute.use("/admin", authAdminRouter_1.default);
 exports.default = appRoute;
 //# sourceMappingURL=route.js.map

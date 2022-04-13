@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.verificaToken = void 0;
 const jwt = require("jsonwebtoken");
 const userop_1 = require("../dbOperations/userop");
+require("dotenv").config({ path: "../.env" });
 const userService = new userop_1.UserOp();
 const verificaToken = async (req, res, next) => {
     if (req.headers === undefined || req.headers.authorization === undefined) {
@@ -12,7 +13,7 @@ const verificaToken = async (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     let legit;
     try {
-        legit = jwt.verify(token, "aleluia");
+        legit = jwt.verify(token, process.env.jwtsecret);
     }
     catch (e) {
         console.log("1");

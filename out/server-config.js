@@ -7,6 +7,7 @@ exports.Server = void 0;
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const route_1 = __importDefault(require("./routes/route"));
+require("dotenv").config({ path: "./.env" });
 class Server {
     constructor(port) {
         this.appRoutes = route_1.default;
@@ -20,7 +21,7 @@ class Server {
         });
     }
     connectToDataBase() {
-        mongoose_1.default.connect("mongodb+srv://vladl1:parola123@cluster0.8w5tg.mongodb.net/bazadedadasffiljf?retryWrites=true&w=majority");
+        mongoose_1.default.connect(process.env.db);
         console.log("CONEXION TO DATABASE ESTABLISHED");
     }
 }

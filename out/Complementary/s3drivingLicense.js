@@ -2,10 +2,11 @@ require("dotenv").config();
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
+require("dotenv").config({ path: "../.env" });
 const s3 = new AWS.S3({
-    accesKeyId: "S3iddrivinglicense",
-    secretAccessKey: "secret",
-    region: "eu-central-1",
+    accesKeyId: process.env.accesID,
+    secretAccessKey: process.env.accesKey,
+    region: process.env.region,
 });
 class ResourceService {
     async uploadFile(file, customerId) {

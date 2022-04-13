@@ -22,10 +22,6 @@ class Allop {
     deleteByUsername(username) {
         return this.model.deleteOne({ "username": username });
     }
-    async findAll(model, clasa, username) {
-        let x = await model.find({});
-        return x;
-    }
 }
 exports.Allop = Allop;
 //# sourceMappingURL=allop.js.map

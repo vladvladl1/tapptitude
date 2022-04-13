@@ -8,7 +8,7 @@ const mongoose_2 = require("mongoose");
 const adminSchema = new mongoose_2.Schema({
     email: { type: String },
     username: { type: String },
-    parola: { type: String },
+    password: { type: String },
 });
 const adminModel = mongoose_1.default.model("admin", adminSchema);
 exports.default = adminModel;
