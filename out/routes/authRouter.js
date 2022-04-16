@@ -25,21 +25,24 @@ authRouter.get("/login", async (req, res) => {
 //register post route
 authRouter.post("/register", async (req, res) => {
     const { body } = req;
+    console.log(body);
+    console.log(body.email);
     try {
-        if (!(body.email && body.username && body.password)) {
-            res.status(400).send({ error: "wrong data" });
+        if (body.email === undefined || body.username === undefined || body.password === undefined && body.drivingLicense === undefined) {
+            res.status(220).send({ error: "wrong data" });
         }
+        const thepass = body.password;
         const om = await userService.findByEmail(body.email); // await findByEmail(body.email)
         if (om) {
             res.send({ error: "user already registered" });
         }
         else {
-            // const user = new User(body.email, body.username, body.parola);
             const enc = await bcrypt.genSalt(10);
-            body.password = await bcrypt.hash(body.password, enc);
-            const token = jwt.sign({ username: req.username }, process.env.jwtsecret);
+            const pass = await bcrypt.hash(thepass, enc);
+            const token = jwt.sign({ username: body.username }, process.env.jwtsecret);
+            body.password = pass;
             const createdUser = await userService.createObject(body);
-            res.status(200).send({ om, token });
+            res.status(200).send({ createdUser, token });
         }
     }
     catch (e) {
@@ -58,13 +61,17 @@ authRouter.post("/login", async (req, res) => {
             res.send({ error: "no user with this email" });
         }
         bcrypt.compare(req.body.password, user.password, async (err, resp) => {
+            console.log(user.password);
+            console.log(user.username);
+            console.log(user.email);
             if (err) {
                 res.status(400).send({ error: "wrong passsword" });
             }
             if (resp) {
-                const token = jwt.sign({ username: req.username }, process.env.jwtsecret);
-                const sess = { username: req.username, token: token };
+                const token = jwt.sign({ username: user.username }, process.env.jwtsecret);
+                const sess = { username: user.username, token: token };
                 const session = await sessionService.createObject(sess);
+                console.log("session username:" + session.username);
                 res.status(200).send({ user, token });
             }
         });

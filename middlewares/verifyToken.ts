@@ -12,6 +12,9 @@ export const verificaToken = async (req: Request, res: Response, next: NextFunct
         console.log("0");
         return res.sendStatus(401);
     }
+    console.log(req.headers);
+    console.log(req.headers.authorization);
+
     const token = req.headers.authorization.split(" ")[1];
     let legit;
     try {
@@ -30,7 +33,7 @@ export const verificaToken = async (req: Request, res: Response, next: NextFunct
         console.log("3");
         return res.sendStatus(401);
     }
-   // const user: IUser = await userService.findByUsername(decoded.username);
+
     req.status(200).send(decoded.username);
     return next();
 }

@@ -8,8 +8,10 @@ const userService = new userop_1.UserOp();
 const verificaToken = async (req, res, next) => {
     if (req.headers === undefined || req.headers.authorization === undefined) {
         console.log("0");
-        return res.sendStatus(401);
+        // return res.sendStatus(401);
     }
+    console.log(req.headers);
+    console.log(req.headers.authorization);
     const token = req.headers.authorization.split(" ")[1];
     let legit;
     try {
