@@ -21,6 +21,23 @@ userRouter.get("/", async (req, res) => {
  res.sendStatus(200);
 });
 
+//get savedl
+
+userRouter.get("/savedl", async (req, res) => {
+    res.sendStatus(200);
+});
+
+//get getdl
+
+userRouter.get("/getdl", async (req, res) => {
+    res.sendStatus(200);
+});
+
+//get getme
+userRouter.get("/getMe", async (req, res) => {
+    res.sendStatus(200);
+});
+
 userRouter.post("/savedl",  async (req: Request & { file:any }, res) => {
    const body = req.body;
    const fil = req.file;
@@ -57,7 +74,7 @@ userRouter.post("/getdl", async (req, res) => {
 userRouter.post("/getMe", verificaToken , async(req, res ) => {
     const username = req.username;
     try{
-        const person= await userService.deleteByUsername(username);
+        const person= await userService.findByUsername(username);
         if(person!==undefined){
             res.status(200).send(person);
         }else{

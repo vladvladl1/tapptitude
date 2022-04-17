@@ -10,6 +10,13 @@ const authAdminRouter = express.Router();
 const adminService = new adminop_1.AdminOp();
 const jwt = require("jsonwebtoken");
 const sessionService = new sessionop_1.SessionOp();
+authAdminRouter.get("/", async (req, res) => {
+    res.status(200).send("good");
+});
+//logout get
+authAdminRouter.get("/logout", async (req, res) => {
+    res.status(200).send("good");
+});
 //login get
 authAdminRouter.get("/login", async (req, res) => {
     res.status(200).send("all good at login");

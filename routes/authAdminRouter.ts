@@ -13,7 +13,14 @@ const jwt  = require("jsonwebtoken");
 const sessionService = new SessionOp();
 
 
+authAdminRouter.get("/",  async (req, res) => {
+    res.status(200).send("good");
+})
 
+//logout get
+authAdminRouter.get("/logout", async (req, res) => {
+    res.status(200).send("good");
+});
 
 //login get
 authAdminRouter.get("/login", async(req, res) => {

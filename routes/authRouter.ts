@@ -19,6 +19,10 @@ authRouter.get("/", async(req, res) => {
    res.status(200).send("good here");
 });
 
+//logut get
+authRouter.get("/logout", async(req, res) => {
+    res.status(200).send("good here");
+});
 
 //register get
 authRouter.get("/register", async(req, res) => {
