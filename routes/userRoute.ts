@@ -21,7 +21,7 @@ userRouter.get("/", async (req, res) => {
  res.sendStatus(200);
 });
 
-userRouter.post("/savePicture",  async (req: Request & { file:any }, res) => {
+userRouter.post("/savedl",  async (req: Request & { file:any }, res) => {
    const body = req.body;
    const fil = req.file;
    const s3 = new ResourceService();
@@ -41,10 +41,17 @@ userRouter.post("/savePicture",  async (req: Request & { file:any }, res) => {
    }
 });
 
-userRouter.post("/getPicture", async (req, res) => {
-
-
-
+userRouter.post("/getdl", async (req, res) => {
+    const filename = req.filename;
+    const username = req.username;
+    const path = `/Driving_license/${username}/${filename}.jpg`;
+    const s3 = new ResourceService();
+    const url =  s3.getFileUrl(path);
+    if(url!==undefined){
+        res.status(200).send(url);
+    }else{
+        res.sendStatus(300);
+    }
 });
 
 userRouter.post("/getMe", verificaToken , async(req, res ) => {
