@@ -12,15 +12,18 @@ export const verificaToken = async (req: Request, res: Response, next: NextFunct
         console.log("0");
         return res.sendStatus(401);
     }
-    console.log(req.headers);
-    console.log(req.headers.authorization);
+    console.log("header" +req.headers);
+    console.log("auth:" + req.headers.authorization);
 
     const token = req.headers.authorization.split(" ")[1];
+    console.log("token:" + token);
     let legit;
     try {
-        legit = jwt.verify(token, process.env.jwtsecret);
+        legit = jwt.verify(JSON.parse(token), process.env.jwtsecret);
+        console.log("legit:" + legit);
     } catch (e) {
         console.log("1");
+        console.log(e);
         return res.sendStatus(401);
     }
     if (legit == false) {
@@ -28,13 +31,14 @@ export const verificaToken = async (req: Request, res: Response, next: NextFunct
         return res.sendStatus(401);
     }
 
-    const decoded = jwt.decode(token);
+    const decoded = jwt.decode(JSON.parse(token));
+    console.log(decoded);
     if (decoded === undefined || decoded.username === undefined) {
         console.log("3");
         return res.sendStatus(401);
     }
-
-    req.status(200).send(decoded.username);
+    req.username = decoded.username;
+    res.status(200).send(decoded.username);
     return next();
 }
 

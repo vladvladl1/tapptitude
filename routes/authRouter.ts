@@ -88,7 +88,7 @@ authRouter.post("/login", async (req, res) => {
                 const sess = <ISession>{username: user.username, token: token};
                 const session = await sessionService.createObject(sess);
                 console.log("session username:" + session.username);
-                res.status(200).send({user, token});
+                return res.status(200).send({user, token});
             }
         });
     }catch(err){
@@ -98,10 +98,11 @@ authRouter.post("/login", async (req, res) => {
 
 
 authRouter.post("/logout",verificaToken ,async (req, res) => {
+
     try {
         const sess = await sessionService.findByUsername(req.username);
         const something = await sessionService.deleteByUsername(sess.username);
-        res.status(200);
+        //res.status(210).send(something);
     }catch(err){
         console.log(err);
     }
