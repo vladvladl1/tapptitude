@@ -7,7 +7,7 @@ require("dotenv").config({path:"./.env"});
 
 //const express = require("express");
 
-const newServer = new Server(parseInt(process.env.PORT));
+const newServer = new Server(parseInt(process.env.PORT) || 5000);
 
 
 newServer.listen();
