@@ -22,6 +22,9 @@ class Allop {
     deleteByUsername(username) {
         return this.model.deleteOne({ "username": username });
     }
+    updatePasswordByUsername(username, password) {
+        return this.model.update({ "username": username }, { $set: { "password": password } });
+    }
 }
 exports.Allop = Allop;
 //# sourceMappingURL=allop.js.map

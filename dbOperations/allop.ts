@@ -24,5 +24,8 @@ export class Allop<T> {
     deleteByUsername (username: string){
         return this.model.deleteOne({"username": username});
     }
+    updatePasswordByUsername (username: string, password: string){
+        return this.model.update({"username": username}, {$set: {"password": password}});
+    }
 
 }

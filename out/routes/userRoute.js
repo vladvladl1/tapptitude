@@ -61,6 +61,40 @@ userRouter.post("/getdl", async (req, res) => {
         res.sendStatus(300);
     }
 });
+userRouter.post("/changePassword", verifyToken_1.verificaToken, async (req, res) => {
+    const email = req.email;
+    const oldPass = req.oldPass;
+    const newPass = req.newPass;
+    try {
+        const person = await userService.findByEmail(email);
+        if (email === undefined || oldPass === undefined || newPass === undefined) {
+            res.status(220).send({ error: "wrong data" });
+        }
+        if (person) {
+            bcrypt.compare(oldPass, person.password, async (err, resp) => {
+                if (err) {
+                    res.status(400).send({ error: "wrong passsword" });
+                }
+                if (resp) {
+                    const enc = await bcrypt.genSalt(10);
+                    const pass = await bcrypt.hash(newPass, enc);
+                    const uperson = await userService.updatePasswordByUsername(person.username, pass);
+                    res.status(200).send(uperson);
+                }
+            });
+        }
+        else {
+            res.status(220).send({ error: "wrong data" });
+        }
+    }
+    catch (err) {
+        console.log(err);
+    }
+});
+userRouter.post("forgotPassword", async (req, res) => {
+    const email = req.email;
+    res.status(200).send("a link to " + email + "has been sent, there you can change password");
+});
 userRouter.post("/getMe", verifyToken_1.verificaToken, async (req, res) => {
     const username = req.username;
     try {
