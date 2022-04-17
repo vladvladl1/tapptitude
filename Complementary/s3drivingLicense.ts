@@ -10,7 +10,7 @@ const s3 = new AWS.S3({
     region: process.env.region,
 });
 
-class ResourceService {
+export class ResourceService {
     async uploadFile(file: File, customerId: string) {
         try {
             const response = await new Promise((res, rej) => {

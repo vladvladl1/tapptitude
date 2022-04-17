@@ -1,3 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ResourceService = void 0;
 require("dotenv").config();
 const AWS = require("aws-sdk");
 const multer = require("multer");
@@ -44,4 +47,5 @@ class ResourceService {
         return url;
     }
 }
+exports.ResourceService = ResourceService;
 //# sourceMappingURL=s3drivingLicense.js.map

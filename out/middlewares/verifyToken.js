@@ -8,7 +8,7 @@ const userService = new userop_1.UserOp();
 const verificaToken = async (req, res, next) => {
     if (req.headers === undefined || req.headers.authorization === undefined) {
         console.log("0");
-        // return res.sendStatus(401);
+        return res.sendStatus(401);
     }
     console.log(req.headers);
     console.log(req.headers.authorization);
@@ -30,7 +30,6 @@ const verificaToken = async (req, res, next) => {
         console.log("3");
         return res.sendStatus(401);
     }
-    // const user: IUser = await userService.findByUsername(decoded.username);
     req.status(200).send(decoded.username);
     return next();
 };
