@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 const jwt = require("jsonwebtoken");
 import {IUser} from "../models/userInterface";
 import {UserOp} from "../dbOperations/userop";
@@ -6,7 +6,7 @@ require("dotenv").config({path:"../.env"});
 
 const userService = new UserOp();
 
-export const verificaToken = async (req: Request, res: Response, next: NextFunction) => {
+export const verificaToken = async (req: Request & {username:string}, res: Response, next: NextFunction) => {
 
     if (req.headers === undefined || req.headers.authorization === undefined) {
         console.log("0");

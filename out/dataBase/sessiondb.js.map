@@ -1,1 +1,0 @@
-{"version":3,"file":"sessiondb.js","sourceRoot":"","sources":["../../dataBase/sessiondb.ts"],"names":[],"mappings":";;;;;AAAA,wDAAgC;AAChC,uCAA0C;AAG1C,MAAM,aAAa,GAAG,IAAI,iBAAM,CAAC;IAC7B,QAAQ,EAAE,EAAC,IAAI,EAAE,MAAM,EAAC;IACxB,KAAK,EAAE,EAAC,IAAI,EAAE,MAAM,EAAC;CACxB,CAAC,CAAC;AAEH,MAAM,YAAY,GAAG,kBAAQ,CAAC,KAAK,CAAW,SAAS,EAAE,aAAa,CAAC,CAAC;AAExE,kBAAe,YAAY,CAAC"}

@@ -12,7 +12,7 @@ const express = require("express");
 
 const userService = new UserOp();
 
- const userRouter = Router();
+ const userRouter = express.Router();
 
 const jwt  = require("jsonwebtoken");
 //register route
@@ -38,7 +38,7 @@ userRouter.get("/getMe", async (req, res) => {
     res.sendStatus(200);
 });
 
-userRouter.post("/savedl",  async (req: Request & { file:any }, res) => {
+userRouter.post("/savedl",  async (req, res) => {
    const body = req.body;
    const fil = req.file;
    const s3 = new ResourceService();
