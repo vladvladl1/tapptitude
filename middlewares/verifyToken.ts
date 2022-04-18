@@ -24,7 +24,7 @@ export const verificaToken = async (req: Request & {username:string}, res: Respo
     } catch (e) {
         console.log("1");
         console.log(e);
-        return res.sendStatus(401);
+          return res.sendStatus(401);
     }
     if (legit == false) {
         console.log("2");
@@ -38,7 +38,7 @@ export const verificaToken = async (req: Request & {username:string}, res: Respo
         return res.sendStatus(401);
     }
     req.username = decoded.username;
-    res.status(200).send(decoded.username);
+    //res.status(200).send(decoded.username);
     return next();
 }
 

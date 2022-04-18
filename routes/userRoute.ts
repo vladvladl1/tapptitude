@@ -35,23 +35,30 @@ userRouter.get("/getdl", async (req, res) => {
 
 //get getme
 userRouter.get("/getMe", async (req, res) => {
+
     res.sendStatus(200);
 });
 
-userRouter.post("/savedl",  async (req, res) => {
-   const body = req.body;
-   const fil = req.file;
+userRouter.post("/savedl", verificaToken ,upload.single("fisier"), async (req, res) => {
+   const username = req.username;
+
+   const fil:Express.Multer.File = req.file;
    const s3 = new ResourceService();
     console.log(fil);
     console.log("iar asta e body:");
-    console.log(body);
+    console.log(username);
    try{
-       if(fil !== undefined) {
+
+       if(fil === undefined) {
+           console.log("fil ii nul");
            res.status(220).send(fil);
        }else{
-           const puts3 = await s3.uploadFile(fil, body.username);
+           const puts3 = await s3.uploadFile(fil, username);
+           // @ts-ignore
+           const person = await userService.updateDlByUsername(username, +puts3.path);
+           // @ts-ignore
+           console.log(puts3.path);
            res.status(200).send(puts3);
-           console.log(puts3);
        }
    }catch(err){
     console.log(err);
@@ -59,11 +66,10 @@ userRouter.post("/savedl",  async (req, res) => {
 });
 
 userRouter.post("/getdl", async (req, res) => {
-    const filename = req.filename;
-    const username = req.username;
-    const path = `/Driving_license/${username}/${filename}.jpg`;
+    const path = req.drivingLicense;
     const s3 = new ResourceService();
     const url =  s3.getFileUrl(path);
+
     if(url!==undefined){
         res.status(200).send(url);
     }else{
@@ -107,6 +113,7 @@ userRouter.post("forgotPassword", async (req, res) => {
 
 userRouter.post("/getMe", verificaToken , async(req, res ) => {
     const username = req.username;
+    console.log(req.username);
     try{
         const person= await userService.findByUsername(username);
         if(person!==undefined){

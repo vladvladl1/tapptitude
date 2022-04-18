@@ -5,30 +5,33 @@ const multerS3 = require("multer-s3");
 require("dotenv").config({path:"../.env"});
 
 const s3 = new AWS.S3({
-    accesKeyId: process.env.accesID,
-    secretAccessKey: process.env.accesKey,
+    accesKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     region: process.env.region,
 });
 
 export class ResourceService {
-    async uploadFile(file: File, customerId: string) {
+    async uploadFile(file: Express.Multer.File, customerId: string) {
         try {
+            console.log(1);
             const response = await new Promise((res, rej) => {
                 var params = {
-                    Body: file,
+                    Body: JSON.stringify(file),
                     Bucket: process.env.BUCKET_NAME,
-                    Key: `Driving_license/${customerId}/${file.name}.jpg`,
+                    Key: `Driving_license/${customerId}/${file.filename}.jpg`,
                 };
-
+            console.log(2);
          s3.putObject(params, function (err, data) {
               if (err) rej(err);
                else
+                   console.log(3);
                  res({
-                     path: `Driving_license/${customerId}/${file.name}.jpg`,
+                     path: `Driving_license/${customerId}/${file.filename}.jpg`,
                      message: "Photo uploaded",
                    });
             });
                });
+            console.log("s-a trimis cica");
             return response;
         } catch (err) {
             console.log(err);
