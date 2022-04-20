@@ -5,7 +5,9 @@
   "main": "out/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc && node ."
+    "start": "node .",
+    "build": "tsc",
+    "start:dev": "tsc && node ."
   },
   "keywords": [],
   "author": "",
