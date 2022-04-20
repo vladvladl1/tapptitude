@@ -106,7 +106,7 @@ authRouter.post("/logout",verificaToken ,async (req, res) => {
     try {
         const sess = await sessionService.findByUsername(req.username);
         const something = await sessionService.deleteByUsername(sess.username);
-        //res.status(210).send(something);
+        res.status(200).send(sess);
     }catch(err){
         console.log(err);
     }

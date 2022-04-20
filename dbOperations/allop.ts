@@ -13,6 +13,10 @@ export class Allop<T> {
         return this.model.create(object);
     }
 
+    findAll(){
+        return this.model.find({});
+    }
+
     findByEmail(email:string){
        return this.model.findOne({"email": email}, {_id:0});
     }
@@ -20,7 +24,9 @@ export class Allop<T> {
     findByUsername( username:string ){
         return this.model.findOne({"username": username}, {_id:0});
     }
-
+    findByScooterName(scooterName: string){
+        return this.model.findOne({"scooterName": scooterName}, {_id:0});
+    }
     deleteByUsername (username: string){
         return this.model.deleteOne({"username": username});
     }
@@ -30,4 +36,5 @@ export class Allop<T> {
     updateDlByUsername(username: string, drivingLicence:string){
         return this.model.updateOne({"username": username}, {$set: {"drivingLicense":drivingLicence}});
     }
+
 }

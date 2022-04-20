@@ -33,11 +33,14 @@ export const verificaToken = async (req: Request & {username:string}, res: Respo
 
     const decoded = jwt.decode(JSON.parse(token));
     console.log(decoded);
+    console.log(decoded.username);
     if (decoded === undefined || decoded.username === undefined) {
         console.log("3");
         return res.sendStatus(401);
     }
+
     req.username = decoded.username;
+    console.log(req.username);
     //res.status(200).send(decoded.username);
     return next();
 }

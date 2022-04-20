@@ -1,4 +1,4 @@
-import scooterModel from "../dataBase/userdb";
+import scooterModel from "../dataBase/scooterdb";
 import {IScooter} from "../models/scooterInterface";
 import {Allop} from "./allop";
 

@@ -1,4 +1,4 @@
-import adminModel from "../dataBase/userdb";
+import adminModel from "../dataBase/admindb";
 import {IAdmin} from "../models/adminInterface";
 import {Allop} from "./allop";
 

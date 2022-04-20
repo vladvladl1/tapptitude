@@ -1,9 +1,10 @@
 import {Document} from "mongoose";
 
 export interface IScooter extends Document {
+    scooterName: string,
     battery: number,
     lockedStatus: string,
     bookedStatus: string,
     lastSeenDate: Date,
-    gpsCoordinates: string
+    gpsCoordinates: {type:string, coordinates: [number]}
 }

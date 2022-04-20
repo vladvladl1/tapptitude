@@ -3,8 +3,10 @@ import { AdminOp} from "../dbOperations/adminop"
 import {verificaToken} from "../middlewares/verifyToken";
 require("dotenv").config({path:"../.env"});
 import {SessionOp} from "../dbOperations/sessionop";
+import {IAdmin} from "../models/adminInterface";
+import {ISession} from "../models/sessionInterface";
 
-const bcrypt = require("bcrypt");
+
 
 
 const express = require('express');
@@ -28,36 +30,59 @@ authAdminRouter.get("/login", async(req, res) => {
     res.status(200).send("all good at login");
 });
 
+authAdminRouter.post("/createTestAdmin", async (req:Request<unknown, unknown, IAdmin>, res) => {
+    const {body} = req;
+    console.log(body.username);
+    try{
+        const token = jwt.sign({ username : body.username}, process.env.jwtsecret);
+        const admin = await adminService.createObject(body);
+        console.log(body);
+        console.log(admin);
+        return res.status(200).send({body, token});
+    }catch(e){
+        console.log(e);
+    }
+})
+
 //login post
 authAdminRouter.post("/login", async (req, res) => {
     try {
         const admin = await adminService.findByEmail(req.body.email);
-        const enc = await bcrypt.genSalt(10);
-        const pass = await bcrypt.hash(req.body.password, enc)
-        console.log(pass);
+
+
         if (!admin) {
             res.status(401);
             res.send({error: "no user with this email"});
         }
-        bcrypt.compare(req.body.password, admin.password, (err, resp) => {
-            if (err) {
+
+            if (req.body.password !== admin.password) {
+                console.log(req.body.password);
+                console.log(admin);
                 res.status(400).send({error: "wrong passsword"});
             }
-            if (resp) {
-                const token = jwt.sign({username: req.username}, process.env.jwtsecret);
-                res.status(200).send({admin, token});
+            else {
+                const token = jwt.sign({username: admin.username}, process.env.jwtsecret);
+                const sess = <ISession>{username: admin.username, token: token};
+                const session = await sessionService.createObject(sess);
+                console.log(session);
+                return res.status(200).send({admin, token});
             }
-        });
+
     }catch(err){
         console.log(err);
     }
 });
 
-authAdminRouter.post("/logout",verificaToken ,async (req, res) => {
+authAdminRouter.post("/logout", verificaToken, async (req, res) => {
     try {
+        console.log("req:" + req.username);
+        console.log("req.body:" + req.body.username);
+
         const sess = await sessionService.findByUsername(req.username);
+
+        console.log("sess:" + sess);
         const something = await sessionService.deleteByUsername(sess.username);
-        res.status(200);
+        res.status(200).send(sess);
     }catch(err){
         console.log(err);
     }
