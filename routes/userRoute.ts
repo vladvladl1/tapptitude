@@ -54,11 +54,11 @@ userRouter.post("/savedl", verificaToken ,upload.single("fisier"), async (req, r
            res.status(220).send(fil);
        }else{
            const puts3 = await s3.uploadFile(fil, username);
-
-          // const person = await userService.updateDlByUsername(username, +puts3.path);
+            
+           const person = await userService.updateDlByUsername(username, puts3.path);
 
            //console.log(puts3.path);
-           res.status(200).send(puts3);
+           res.status(200).json(puts3);
        }
 
    }catch(err){

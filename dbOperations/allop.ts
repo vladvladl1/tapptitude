@@ -28,6 +28,6 @@ export class Allop<T> {
         return this.model.update({"username": username}, {$set: {"password": password}});
     }
     updateDlByUsername(username: string, drivingLicence:string){
-        return this.model.update({"username": username},{$set: {"drivingLicence":drivingLicence}});
+        return this.model.updateOne({"username": username}, {$set: {"drivingLicense":drivingLicence}});
     }
 }
