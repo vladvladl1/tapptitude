@@ -6,5 +6,4 @@ export interface IScooter extends Document {
     bookedStatus: string,
     lastSeenDate: Date,
     gpsCoordinates: string
-
 }

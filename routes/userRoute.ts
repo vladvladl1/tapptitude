@@ -54,7 +54,7 @@ userRouter.post("/savedl", verificaToken ,upload.single("fisier"), async (req, r
            res.status(220).send(fil);
        }else{
            const puts3 = await s3.uploadFile(fil, username);
-            
+
            const person = await userService.updateDlByUsername(username, puts3.path);
 
            //console.log(puts3.path);
@@ -66,8 +66,9 @@ userRouter.post("/savedl", verificaToken ,upload.single("fisier"), async (req, r
    }
 });
 
-userRouter.post("/getdl", async (req, res) => {
-    const path = req.drivingLicense;
+userRouter.post("/getdl", verificaToken, async (req, res) => {
+    const person = await userService.findByUsername(req.username);
+    const path = person.drivingLicense;
     const s3 = new ResourceService();
     const url =  s3.getFileUrl(path);
 

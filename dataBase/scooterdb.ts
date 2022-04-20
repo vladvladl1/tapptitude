@@ -3,7 +3,7 @@ import {Schema, Document} from "mongoose";
 import {IScooter} from "../models/scooterInterface";
 
 const scooterSchema = new Schema({
-    batter: {type: Number},
+    battery: {type: Number},
     lockedStatus: {type: String},
     bookedStatus: {type: String},
     lastSeenDate: {type: Date},
