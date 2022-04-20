@@ -9,6 +9,7 @@ const scooterSchema = new Schema({
     lockedStatus: {type: String},
     bookedStatus: {type: String},
     lastSeenDate: {type: Date},
+    pin: {type: Number},
     gpsCoordinates: {
         type: {
             type: String, // Don't do `{ location: { type: String } }`

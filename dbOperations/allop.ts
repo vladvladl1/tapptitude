@@ -17,6 +17,10 @@ export class Allop<T> {
         return this.model.find({});
     }
 
+    findByPin(pin: number){
+        return this.model.findOne({"pin": pin}, {_id:0});
+    }
+
     findByEmail(email:string){
        return this.model.findOne({"email": email}, {_id:0});
     }
@@ -32,6 +36,12 @@ export class Allop<T> {
     }
     updatePasswordByUsername (username: string, password: string){
         return this.model.update({"username": username}, {$set: {"password": password}});
+    }
+    updateLockedByName (name: string, locked: string){
+        return this.model.update({"scooterName": name}, {$set: {"lockedStatus": locked}});
+    }
+    updateLockedByPin (pin: number, locked: string){
+        return this.model.update({"pin": pin}, {$set: {"lockedStatus": locked}});
     }
     updateDlByUsername(username: string, drivingLicence:string){
         return this.model.updateOne({"username": username}, {$set: {"drivingLicense":drivingLicence}});
