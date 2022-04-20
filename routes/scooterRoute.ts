@@ -55,6 +55,26 @@ scooterRouter.post("/lockScooter", async(req , res) => {
     }
 });
 
+scooterRouter.post("/deleteScooters", async(req , res) => {
+    try{
+        const deleted = await scooterService.deleteAll();
+        res.sendStatus(200);
+    }catch (err){
+        console.log(err);
+        res.sendStatus(300);
+    }
+});
+
+scooterRouter.post("/getAllScooters", async(req , res) => {
+    try{
+        const finded = await scooterService.findAll();
+        res.status(200).send(finded);
+    }catch (err){
+        console.log(err);
+        res.sendStatus(300);
+    }
+});
+
 
 
 export default scooterRouter;
