@@ -58,8 +58,8 @@ authRouter.post("/register", async (req: Request<unknown, unknown, IUser>, res) 
         const pass = await bcrypt.hash(thepass, enc);
         const token = jwt.sign({ username : body.username}, process.env.jwtsecret);
         body.password = pass;
-        const createdUser = await userService.createObject(body);
-        res.status(200).send({createdUser, token});
+        const User = await userService.createObject(body);
+        res.status(200).send({User, token});
 
         }
     }
