@@ -75,9 +75,14 @@ authRouter.post("/login", async (req, res) => {
         const enc = await bcrypt.genSalt(10);
         const pass = await bcrypt.hash(req.body.password, enc)
         console.log(pass);
+
+            const session = await sessionService.findByUsername(user.username);
+            if (session) {
+                return res.status(400).send({error: "user already registered"});
+            }
+
         if (!user) {
-            res.status(401);
-            res.send({error: "no user with this email"});
+            res.status(401).send({error: "no user with this email"});
         }
         bcrypt.compare(req.body.password, user.password, async (err, resp) => {
             console.log(user.password);
