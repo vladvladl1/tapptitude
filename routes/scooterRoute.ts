@@ -30,30 +30,8 @@ scooterRouter.post("/createScooter", async(req: Request<unknown, unknown, IScoot
     }
 });
 
-scooterRouter.post("/unlockScooter", async(req , res) => {
-    const pin = req.body.pin;
-    console.log("un para:" +pin);
-    try {
-        const update = await scooterService.updateLockedByPin(pin, "unlocked");
-        res.status(200).send(update);
-    }catch(err){
-        console.log(err);
-        res.sendStatus(401);
-    }
-});
 
-scooterRouter.post("/lockScooter", async(req , res) => {
-    const pin = req.body.pin;
-    console.log("params" + pin);
-    try {
-        const scooter = await scooterService.findByPin(pin);
-        const update = await scooterService.updateLockedByName(scooter.scooterName, "locked");
-        res.status(200).send(update);
-    }catch(err){
-        console.log(err);
-        res.sendStatus(401);
-    }
-});
+
 
 scooterRouter.post("/deleteScooters", async(req , res) => {
     try{
@@ -75,6 +53,31 @@ scooterRouter.post("/getAllScooters", async(req , res) => {
     }
 });
 
+
+scooterRouter.get("/unlockScooter", async(req , res) => {
+    const { pin } = req.query;
+    console.log("un para: " + pin);
+    try {
+        const update = await scooterService.updateLockedByPin(pin, "unlocked");
+        res.status(200).send(update);
+    }catch(err){
+        console.log(err);
+        res.sendStatus(401);
+    }
+});
+
+scooterRouter.get("/lockScooter", async(req , res) => {
+    const {pin} = req.query;
+    console.log("params" + pin);
+    try {
+        const scooter = await scooterService.findByPin(pin);
+        const update = await scooterService.updateLockedByName(scooter.scooterName, "locked");
+        res.status(200).send(update);
+    }catch(err){
+        console.log(err);
+        res.sendStatus(401);
+    }
+});
 
 
 export default scooterRouter;
