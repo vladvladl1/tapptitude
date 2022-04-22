@@ -9,3 +9,4 @@ export interface IRide extends Document {
     stop: {type:string, coordinates: [number]},
     dateOfStart: Date
 }
+

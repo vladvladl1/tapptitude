@@ -51,15 +51,13 @@ authRouter.post("/register", async (req: Request<unknown, unknown, IUser>, res) 
     const thepass = body.password;
     const om =  await userService.findByEmail(body.email); // await findByEmail(body.email)
     if(om){
-            res.send({error: "user already registered"});
+           return res.send({error: "user already registered"});
     }
     const man = await userService.findByUsername(body.username);
     if(man){
         res.send({error: "username taken"});
     }
     else{
-
-
         const enc = await bcrypt.genSalt(10);
         const pass = await bcrypt.hash(thepass, enc);
         const token = jwt.sign({ username : body.username}, process.env.jwtsecret);

@@ -73,7 +73,7 @@ scooterRouter.get("/unlockScooter/:scooterId", async(req , res) => {
     try {
         const scooter = await scooterService.findByScooterId(scooterId);
         if(scooter.pin == pin) {
-            const update = await scooterService.updateLockedByPin(pin, "unlocked");
+            const update = await scooterService.updateLockedByName(scooterId, "unlocked");
             res.status(200).send(update);
         }else{
             res.status(220).send({error: "wrong pin"});
@@ -92,7 +92,7 @@ scooterRouter.get("/lockScooter/:scooterId", async(req , res) => {
     try {
         const scooter = await scooterService.findByScooterId(scooterId);
         if(scooter.pin == pin) {
-            const update = await scooterService.updateLockedByPin(pin, "unlocked");
+            const update = await scooterService.updateLockedByName(scooterId, "unlocked");
             res.status(200).send(update);
         }else{
             res.status(220).send({error: "wrong pin"});
