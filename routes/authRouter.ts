@@ -78,7 +78,7 @@ authRouter.post("/login", async (req, res) => {
 
             const session = await sessionService.findByUsername(user.username);
             if (session) {
-                sessionService.deleteByUsername(user.username);
+                const deleted = await sessionService.deleteByUsername(user.username);
             }
 
         if (!user) {
