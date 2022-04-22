@@ -78,7 +78,7 @@ authRouter.post("/login", async (req, res) => {
 
             const session = await sessionService.findByUsername(user.username);
             if (session) {
-                return res.status(400).send({error: "user already registered"});
+                sessionService.deleteByUsername(user.username);
             }
 
         if (!user) {
