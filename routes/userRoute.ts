@@ -82,12 +82,15 @@ userRouter.post("/getdl", verificaToken, async (req, res) => {
 
 userRouter.post("/changePassword",verificaToken, async (req, res) => {
     const username = req.username;
-    const oldPass = req.oldPass;
-    const newPass = req.newPass;
+    const oldPass = req.body.oldPass;
+    const newPass = req.body.newPass;
+    console.log("usernmae" + username);
+    console.log("old" + oldPass);
+    console.log("new" + newPass);
     try{
         const person = await userService.findByUsername(username);
         if( username===undefined || oldPass===undefined || newPass===undefined){
-            res.status(220).send({error: "wrong data"});
+           return res.status(220).send({error: "wrong data"});
         }
         if(person){
             bcrypt.compare(oldPass, person.password, async (err, resp) => {
