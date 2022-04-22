@@ -93,11 +93,10 @@ authRouter.post("/login", async (req, res) => {
             }
             if (resp) {
 
-                const token1 = jwt.sign({username: user.username}, process.env.jwtsecret);
-                const sess = <ISession>{username: user.username, token: token1};
+                const token = jwt.sign({username: user.username}, process.env.jwtsecret);
+                const sess = <ISession>{username: user.username, token: token};
                 const session = await sessionService.createObject(sess);
                 console.log("session username:" + session.username);
-                const token = token1.split(" ")[1];
                 return res.status(200).send({user, token});
             }
         });
