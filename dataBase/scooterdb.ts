@@ -4,7 +4,7 @@ import {IScooter} from "../models/scooterInterface";
 
 
 const scooterSchema = new Schema({
-    scooterName: {type: String},
+    scooterId: {type: String},
     battery: {type: Number},
     lockedStatus: {type: String},
     bookedStatus: {type: String},

@@ -17,6 +17,17 @@ scooterRouter.get("/", async (req, res) => {
 
 });
 
+scooterRouter.get("/unlockScooter", async (req, res) => {
+    res.sendStatus(200);
+});
+
+scooterRouter.get("/lockScooter", async (req, res) => {
+    res.sendStatus(200);
+});
+
+scooterRouter.get("/", async (req, res) => {
+
+});
 
 
 scooterRouter.post("/createScooter", async(req: Request<unknown, unknown, IScooter>, res) => {
@@ -54,12 +65,19 @@ scooterRouter.post("/getAllScooters", async(req , res) => {
 });
 
 
-scooterRouter.get("/unlockScooter", async(req , res) => {
+scooterRouter.get("/unlockScooter/:scooterId", async(req , res) => {
     const { pin } = req.query;
+    const scooterId = req.params.scooterId;
     console.log("un para: " + pin);
+    console.log("scooter id este  " + scooterId);
     try {
-        const update = await scooterService.updateLockedByPin(pin, "unlocked");
-        res.status(200).send(update);
+        const scooter = await scooterService.findByScooterId(scooterId);
+        if(scooter.pin == pin) {
+            const update = await scooterService.updateLockedByPin(pin, "unlocked");
+            res.status(200).send(update);
+        }else{
+            res.status(220).send({error: "wrong pin"});
+        }
     }catch(err){
         console.log(err);
         res.sendStatus(401);
@@ -67,13 +85,18 @@ scooterRouter.get("/unlockScooter", async(req , res) => {
 });
 
 
-scooterRouter.get("/lockScooter", async(req , res) => {
-    const {pin} = req.query;
+scooterRouter.get("/lockScooter/:scooterId", async(req , res) => {
+    const { pin} = req.query;
+    const scooterId = req.params.scooterId;
     console.log("params" + pin);
     try {
-        const scooter = await scooterService.findByPin(pin);
-        const update = await scooterService.updateLockedByName(scooter.scooterName, "locked");
-        res.status(200).send(update);
+        const scooter = await scooterService.findByScooterId(scooterId);
+        if(scooter.pin == pin) {
+            const update = await scooterService.updateLockedByPin(pin, "unlocked");
+            res.status(200).send(update);
+        }else{
+            res.status(220).send({error: "wrong pin"});
+        }
     }catch(err){
         console.log(err);
         res.sendStatus(401);

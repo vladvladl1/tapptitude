@@ -6,4 +6,6 @@ export interface IUser extends Document{
     username: string;
     password: string;
     drivingLicense: string;
+    profilePicture: string;
+    date: Date;
 }

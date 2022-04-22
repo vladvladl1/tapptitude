@@ -28,8 +28,8 @@ export class Allop<T> {
     findByUsername( username:string ){
         return this.model.findOne({"username": username}, {_id:0});
     }
-    findByScooterName(scooterName: string){
-        return this.model.findOne({"scooterName": scooterName}, {_id:0});
+    findByScooterId(scooterId: string){
+        return this.model.findOne({"scooterId": scooterId}, {_id:0});
     }
     deleteByUsername (username: string){
         return this.model.deleteOne({"username": username});

@@ -41,6 +41,7 @@ authRouter.get("/login", async(req, res) => {
 authRouter.post("/register", async (req: Request<unknown, unknown, IUser>, res) => {
 
     const {body} = req;
+    body.date = new Date();
     console.log(body);
     console.log(body.email);
     try{

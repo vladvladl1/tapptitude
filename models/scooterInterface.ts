@@ -1,7 +1,7 @@
 import {Document} from "mongoose";
 
 export interface IScooter extends Document {
-    scooterName: string,
+    scooterId: string,
     battery: number,
     lockedStatus: string,
     bookedStatus: string,
