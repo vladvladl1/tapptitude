@@ -2,8 +2,10 @@ import {Document} from "mongoose";
 
 export interface IRide extends Document {
     username: string,
+    scooterId: string,
     price: number,
     time: number,
-    start: string,
-    stop: string
+    start: {type:string, coordinates: [number]},
+    stop: {type:string, coordinates: [number]},
+    dateOfStart: Date
 }

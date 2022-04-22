@@ -45,14 +45,19 @@ authRouter.post("/register", async (req: Request<unknown, unknown, IUser>, res) 
     console.log(body);
     console.log(body.email);
     try{
-    if( body.email===undefined || body.username===undefined || body.password===undefined && body.drivingLicense===undefined){
+    if( body.email===undefined || body.username===undefined || body.password===undefined ){
        res.status(220).send({error: "wrong data"});
     }
     const thepass = body.password;
     const om =  await userService.findByEmail(body.email); // await findByEmail(body.email)
     if(om){
             res.send({error: "user already registered"});
-    } else{
+    }
+    const man = await userService.findByUsername(body.username);
+    if(man){
+        res.send({error: "username taken"});
+    }
+    else{
 
 
         const enc = await bcrypt.genSalt(10);
