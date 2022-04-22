@@ -66,6 +66,7 @@ scooterRouter.get("/unlockScooter", async(req , res) => {
     }
 });
 
+
 scooterRouter.get("/lockScooter", async(req , res) => {
     const {pin} = req.query;
     console.log("params" + pin);
