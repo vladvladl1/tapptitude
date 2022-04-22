@@ -81,12 +81,12 @@ userRouter.post("/getdl", verificaToken, async (req, res) => {
 });
 
 userRouter.post("/changePassword",verificaToken, async (req, res) => {
-    const email = req.email;
+    const username = req.username;
     const oldPass = req.oldPass;
     const newPass = req.newPass;
     try{
-        const person = await userService.findByEmail(email);
-        if( email===undefined || oldPass===undefined || newPass===undefined){
+        const person = await userService.findByUsername(username);
+        if( username===undefined || oldPass===undefined || newPass===undefined){
             res.status(220).send({error: "wrong data"});
         }
         if(person){
