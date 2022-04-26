@@ -108,6 +108,7 @@ userRouter.post("/changePassword",verificaToken, async (req, res) => {
             res.status(220).send({error: "wrong data"});
         }
     }catch(err){
+        res.status(401).send({error: "wrong old password"});
         console.log(err);
     }
 });

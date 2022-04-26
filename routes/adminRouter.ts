@@ -7,8 +7,9 @@ import {IAdmin} from "../models/adminInterface";
 import {ISession} from "../models/sessionInterface";
 import {IScooter} from "../models/scooterInterface";
 import {ScooterOp} from "../dbOperations/scooterop";
+import {UserOp} from "../dbOperations/userop";
 
-
+const userService = new UserOp();
 const express = require('express');
 const adminRouter = express.Router();
 const adminService = new AdminOp();
@@ -33,5 +34,19 @@ adminRouter.post("/createScooter", async(req: Request<unknown, unknown, IScooter
     }
 });
 
+adminRouter.delete("/suspendUser", async(req, res) => {
+   const username = req.body.username;
+   try{
+       const user = userService.deleteByUsername(username);
+       res.sendStatus(200);
+   }catch(err){
+       res.sendStatus(400);
+       console.log(err);
+   }
+});
+
+adminRouter.get("/getByDate", async(req, res) => {
+
+});
 
 export default adminRouter;
