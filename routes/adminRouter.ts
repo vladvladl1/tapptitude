@@ -46,7 +46,12 @@ adminRouter.delete("/suspendUser", async(req, res) => {
 });
 
 adminRouter.get("/getByDate", async(req, res) => {
+    try{
 
+    }catch(err){
+        console.log(err);
+        res.sendStatus(400);
+    }
 });
 
 export default adminRouter;

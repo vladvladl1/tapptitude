@@ -88,24 +88,23 @@ userRouter.post("/changePassword",verificaToken, async (req, res) => {
     console.log("new" + newPass);
     try{
         const person = await userService.findByUsername(username);
-        console.log("parola1 este: "+person);
         if( username===undefined || oldPass===undefined || newPass===undefined){
-            console.log("da");
-           return res.status(220).send({error: "wrong data"});
+            res.status(220).send({error: "wrong data"});
         }
         if(person!==undefined){
-            console.log("nu");
-            console.log("parola este: "+person.password);
             bcrypt.compare(oldPass, person.password, async (err, resp) => {
                 if (err) {
+                    console.log("err m");
                     res.status(400).send({error: "wrong passsword"});
                 }
                 if (resp) {
+                    console.log("resp m");
                     const enc = await bcrypt.genSalt(10);
                     const pass = await bcrypt.hash(newPass, enc);
                     const uperson = await userService.updatePasswordByUsername(person.username, pass);
                     res.status(200).send(uperson);
                 }
+                res.status(400).send({error: "wrong password"});
             });
         }else{
             console.log("ajunge aici");
