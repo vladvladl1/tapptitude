@@ -1,7 +1,6 @@
-import {json, Request, Router} from "express";
+
 import {verificaToken} from "../middlewares/verifyToken";
 import {ResourceService} from "../Complementary/s3drivingLicense";
-import {IUser} from "../models/userInterface";
 import {UserOp} from "../dbOperations/userop";
 const multer =  require("multer");
 const upload = multer({ dest:"upload"})
@@ -89,10 +88,14 @@ userRouter.post("/changePassword",verificaToken, async (req, res) => {
     console.log("new" + newPass);
     try{
         const person = await userService.findByUsername(username);
+        console.log("parola1 este: "+person);
         if( username===undefined || oldPass===undefined || newPass===undefined){
+            console.log("da");
            return res.status(220).send({error: "wrong data"});
         }
-        if(person){
+        if(person!==undefined){
+            console.log("nu");
+            console.log("parola este: "+person.password);
             bcrypt.compare(oldPass, person.password, async (err, resp) => {
                 if (err) {
                     res.status(400).send({error: "wrong passsword"});
@@ -105,9 +108,11 @@ userRouter.post("/changePassword",verificaToken, async (req, res) => {
                 }
             });
         }else{
+            console.log("ajunge aici");
             res.status(220).send({error: "wrong data"});
         }
     }catch(err){
+        console.log("aici la err");
         res.status(401).send({error: "wrong old password"});
         console.log(err);
     }

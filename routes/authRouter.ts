@@ -65,7 +65,7 @@ authRouter.post("/register", async (req: Request<unknown, unknown, IUser>, res) 
         const user = await userService.createObject(body);
         const sess = <ISession>{username: user.username, token: token};
         const session = await sessionService.createObject(sess);
-        res.status(200).send({user, token});
+        return res.status(200).send({user, token});
 
         }
     }

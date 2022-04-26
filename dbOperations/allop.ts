@@ -36,6 +36,9 @@ export class Allop<T> {
     findOngoingRideByUsername(username: string){
         return this.model.findOne({"username": username, "time": 0});
     }
+    findBySortedDate(){
+        return this.model.find().sort({date:1});
+    }
     deleteByUsername (username: string){
         return this.model.deleteOne({"username": username});
     }
