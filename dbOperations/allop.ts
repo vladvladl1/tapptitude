@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
+
 
 type Position = {type:string, coordinates:[number]};
 
@@ -38,6 +39,10 @@ export class Allop<T> {
     }
     findBySortedDate(){
         return this.model.find().sort({date:1});
+    }
+    findById(id: string){
+        const Id = new mongoose.Types.ObjectId(id);
+        return this.model.findOne({"_id":Id});
     }
     deleteByUsername (username: string){
         return this.model.deleteOne({"username": username});

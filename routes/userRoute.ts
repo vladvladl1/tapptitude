@@ -2,6 +2,7 @@
 import {verificaToken} from "../middlewares/verifyToken";
 import {ResourceService} from "../Complementary/s3drivingLicense";
 import {UserOp} from "../dbOperations/userop";
+import {ScooterOp} from "../dbOperations/scooterop";
 const multer =  require("multer");
 const upload = multer({ dest:"upload"})
 
@@ -10,6 +11,7 @@ const bcrypt = require("bcrypt");
 const express = require("express");
 
 const userService = new UserOp();
+const scooterService = new ScooterOp();
 
  const userRouter = express.Router();
 
@@ -136,6 +138,17 @@ userRouter.post("/getMe", verificaToken , async(req, res ) => {
         console.log(err);
         res.sendStatus(300);
     }
+});
+
+userRouter.get("/scooterDetail/:scooterId", async (req, res) => {
+   const scooterId = req.params.scooterId;
+   try{
+       const scooter = scooterService.findByScooterId(scooterId);
+       res.status(200).send(scooter);
+   }catch(err){
+       console.log(err);
+       res.status(400).send({error: "no scooter with that id"})
+   }
 });
 
 export default userRouter;

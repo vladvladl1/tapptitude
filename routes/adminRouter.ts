@@ -8,7 +8,9 @@ import {ISession} from "../models/sessionInterface";
 import {IScooter} from "../models/scooterInterface";
 import {ScooterOp} from "../dbOperations/scooterop";
 import {UserOp} from "../dbOperations/userop";
+import {RideOp} from "../dbOperations/rideop";
 
+const rideService = new RideOp();
 const userService = new UserOp();
 const express = require('express');
 const adminRouter = express.Router();
@@ -47,10 +49,35 @@ adminRouter.delete("/suspendUser", async(req, res) => {
 
 adminRouter.get("/getByDate", async(req, res) => {
     try{
-
+        const users = await userService.findBySortedDate();
+        res.status(200).send(users);
     }catch(err){
         console.log(err);
         res.sendStatus(400);
+    }
+});
+
+adminRouter.get("scooterInfo/:scooterId", async (req, res) => {
+   const scooterId = req.params.scooterId;
+    try{
+       const scooter = await scooterService.findByScooterId(scooterId);
+       if(scooter!==undefined){
+           res.status(200).send(scooter);
+       }
+   }catch(err){
+        res.status(400).send({error: "no scooter was find with that ID"});
+       console.log(err);
+   }
+});
+
+adminRouter.get("rideInfo/:rideId", async (req, res) => {
+    const id = req.params.rideId;
+    try{
+        const ride = await rideService.findById(id);
+        res.status(200).send(ride);
+    }catch(err){
+        res.status(400).send({error: "wrong data"});
+        console.log(err);
     }
 });
 
