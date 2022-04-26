@@ -36,6 +36,7 @@ rideRouter.get("/history", verificaToken, async (req, res) => {
    }
 });
 
+
 rideRouter.get("/stopRide/:scooterId", verificaToken, async (req, res) => {
     const scooterId = req.params.scooterId;
     const userPos = req.body;
