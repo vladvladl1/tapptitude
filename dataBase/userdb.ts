@@ -6,8 +6,8 @@ const userSchema = new Schema({
     email: {type: String},
     username: {type: String},
     password: {type: String},
-    drivingLicense: {type: String, default: '1'},
-    profilePicture: {type: String, default: '1'},
+    drivingLicense: {type: String, default: ''},
+    profilePicture: {type: String, default: ''},
     date: {type: Date}
 });
 

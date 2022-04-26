@@ -65,7 +65,7 @@ scooterRouter.post("/getAllScooters", async(req , res) => {
 });
 
 
-scooterRouter.get("/unlockScooter/:scooterId", async(req , res) => {
+scooterRouter.get("/:scooterId/unlock", async(req , res) => {
     const { pin } = req.query;
     const scooterId = req.params.scooterId;
     console.log("un para: " + pin);

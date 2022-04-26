@@ -51,11 +51,11 @@ authRouter.post("/register", async (req: Request<unknown, unknown, IUser>, res) 
     const thepass = body.password;
     const om =  await userService.findByEmail(body.email); // await findByEmail(body.email)
     if(om){
-           return res.send({error: "user already registered"});
+           return res.status(201).send({error: "user already registered"});
     }
     const man = await userService.findByUsername(body.username);
     if(man){
-        res.send({error: "username taken"});
+        res.status(202).send({error: "username taken"});
     }
     else{
         const enc = await bcrypt.genSalt(10);
@@ -63,6 +63,8 @@ authRouter.post("/register", async (req: Request<unknown, unknown, IUser>, res) 
         const token = jwt.sign({ username : body.username}, process.env.jwtsecret);
         body.password = pass;
         const user = await userService.createObject(body);
+        const sess = <ISession>{username: user.username, token: token};
+        const session = await sessionService.createObject(sess);
         res.status(200).send({user, token});
 
         }
