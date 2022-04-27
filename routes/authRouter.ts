@@ -88,14 +88,14 @@ authRouter.post("/login", async (req, res) => {
             }
 
         if (user===undefined) {
-           res.status(401).send({error: "no user with this email"});
+           res.status(220).send({error: "no user with this email"});
         }
         bcrypt.compare(req.body.password, user.password, async (err, resp) => {
             console.log(user.password);
             console.log(user.username);
             console.log(user.email);
             if (err) {
-                res.status(400).send({error: "wrong passsword"});
+                res.status(220).send({error: "wrong passsword"});
             }
             if (resp) {
 
@@ -108,7 +108,7 @@ authRouter.post("/login", async (req, res) => {
         });
     }catch(err){
 
-        res.status(401).send({error:"no user in database"});
+        res.status(220).send({error:"no user in database"});
         console.log(err);
     }
 });

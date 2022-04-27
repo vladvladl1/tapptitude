@@ -32,7 +32,7 @@ rideRouter.get("/history", verificaToken, async (req, res) => {
        res.status(200).send(rides);
    }catch(e){
        console.log(e);
-       res.sendStatus(400);
+       res.sendStatus(220);
    }
 });
 
@@ -52,7 +52,7 @@ rideRouter.get("/stopRide/:scooterId", verificaToken, async (req, res) => {
         res.status(200).send(ride);
     }catch (e){
         console.log(e);
-        res.sendStatus(400);
+        res.sendStatus(220);
     }
 });
 

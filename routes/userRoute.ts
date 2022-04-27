@@ -77,7 +77,7 @@ userRouter.post("/getdl", verificaToken, async (req, res) => {
     if(url!==undefined){
         res.status(200).send(url);
     }else{
-        res.sendStatus(300);
+        res.sendStatus(220);
     }
 });
 
@@ -97,7 +97,7 @@ userRouter.post("/changePassword",verificaToken, async (req, res) => {
             bcrypt.compare(oldPass, person.password, async (err, resp) => {
                 if (err) {
                     console.log("err m");
-                    res.status(400).send({error: "wrong passsword"});
+                    res.status(220).send({error: "wrong passsword"});
                 }
                 if (resp) {
                     console.log("resp m");
@@ -106,7 +106,7 @@ userRouter.post("/changePassword",verificaToken, async (req, res) => {
                     const uperson = await userService.updatePasswordByUsername(person.username, pass);
                     res.status(200).send(uperson);
                 }
-                res.status(400).send({error: "wrong password"});
+                res.status(220).send({error: "wrong password"});
             });
         }else{
             console.log("ajunge aici");
@@ -114,7 +114,7 @@ userRouter.post("/changePassword",verificaToken, async (req, res) => {
         }
     }catch(err){
         console.log("aici la err");
-        res.status(401).send({error: "wrong old password"});
+        res.status(220).send({error: "wrong old password"});
         console.log(err);
     }
 });
@@ -136,7 +136,7 @@ userRouter.post("/getMe", verificaToken , async(req, res ) => {
         }
     }catch(err){
         console.log(err);
-        res.sendStatus(300);
+        res.sendStatus(220);
     }
 });
 
@@ -147,7 +147,7 @@ userRouter.get("/scooterDetail/:scooterId", async (req, res) => {
        res.status(200).send(scooter);
    }catch(err){
        console.log(err);
-       res.status(400).send({error: "no scooter with that id"})
+       res.status(220).send({error: "no scooter with that id"})
    }
 });
 

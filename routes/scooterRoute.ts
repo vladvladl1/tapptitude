@@ -37,7 +37,7 @@ scooterRouter.post("/createScooter", async(req: Request<unknown, unknown, IScoot
         res.status(200).send(scooter);
     }catch(e){
         console.log(e);
-        res.sendStatus(300);
+        res.sendStatus(220);
     }
 });
 
@@ -50,7 +50,7 @@ scooterRouter.post("/deleteScooters", async(req , res) => {
         res.sendStatus(200);
     }catch (err){
         console.log(err);
-        res.sendStatus(300);
+        res.sendStatus(220);
     }
 });
 
@@ -60,7 +60,7 @@ scooterRouter.post("/getAllScooters", async(req , res) => {
         res.status(200).send(finded);
     }catch (err){
         console.log(err);
-        res.sendStatus(300);
+        res.sendStatus(220);
     }
 });
 
@@ -80,7 +80,7 @@ scooterRouter.get("/unlockScooter/:scooterId", async(req , res) => {
         }
     }catch(err){
         console.log(err);
-        res.sendStatus(401);
+        res.sendStatus(220);
     }
 });
 

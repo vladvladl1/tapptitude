@@ -32,7 +32,7 @@ adminRouter.post("/createScooter", async(req: Request<unknown, unknown, IScooter
         res.status(200).send(scooter);
     }catch(e){
         console.log(e);
-        res.sendStatus(300);
+        res.sendStatus(220);
     }
 });
 
@@ -42,7 +42,7 @@ adminRouter.delete("/suspendUser", async(req, res) => {
        const user = userService.deleteByUsername(username);
        res.sendStatus(200);
    }catch(err){
-       res.sendStatus(400);
+       res.sendStatus(220);
        console.log(err);
    }
 });
@@ -53,7 +53,7 @@ adminRouter.get("/getByDate", async(req, res) => {
         res.status(200).send(users);
     }catch(err){
         console.log(err);
-        res.sendStatus(400);
+        res.sendStatus(220);
     }
 });
 
@@ -65,7 +65,7 @@ adminRouter.get("scooterInfo/:scooterId", async (req, res) => {
            res.status(200).send(scooter);
        }
    }catch(err){
-        res.status(400).send({error: "no scooter was find with that ID"});
+        res.status(220).send({error: "no scooter was find with that ID"});
        console.log(err);
    }
 });
@@ -76,7 +76,7 @@ adminRouter.get("rideInfo/:rideId", async (req, res) => {
         const ride = await rideService.findById(id);
         res.status(200).send(ride);
     }catch(err){
-        res.status(400).send({error: "wrong data"});
+        res.status(220).send({error: "wrong data"});
         console.log(err);
     }
 });
