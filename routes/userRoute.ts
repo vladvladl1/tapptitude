@@ -88,7 +88,11 @@ userRouter.post("/changePassword",verificaToken, async (req, res) => {
     console.log("usernmae" + username);
     console.log("old" + oldPass);
     console.log("new" + newPass);
+    if(oldPass===newPass){
+        res.status(220).send({error: "Old password can not be same as new password"});
+    }
     try{
+
         const person = await userService.findByUsername(username);
         if( username===undefined || oldPass===undefined || newPass===undefined){
             res.status(220).send({error: "wrong data"});
