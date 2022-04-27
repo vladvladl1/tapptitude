@@ -51,7 +51,7 @@ authAdminRouter.post("/login", async (req, res) => {
 
 
         if (!admin) {
-            res.status(401);
+            res.status(220);
             res.send({error: "no user with this email"});
         }
 

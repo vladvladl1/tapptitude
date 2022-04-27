@@ -15,6 +15,7 @@ const scooterSchema = new Schema({
             type: String, // Don't do `{ location: { type: String } }`
             enum: ['Point'],
             required: false,
+
             default: 'Point'
         },
         coordinates: {
@@ -23,7 +24,7 @@ const scooterSchema = new Schema({
             default: [10, 12]
         }}
 });
-
+scooterSchema.index({gpsCoordinates: "2dsphere"});
 const scooterModel = mongoose.model<IScooter>("scooter", scooterSchema);
 
 export default scooterModel;

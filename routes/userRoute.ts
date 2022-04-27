@@ -4,7 +4,7 @@ import {ResourceService} from "../Complementary/s3drivingLicense";
 import {UserOp} from "../dbOperations/userop";
 import {ScooterOp} from "../dbOperations/scooterop";
 const multer =  require("multer");
-const upload = multer({ dest:"upload"})
+const upload = multer()
 
 
 const bcrypt = require("bcrypt");
@@ -154,5 +154,8 @@ userRouter.get("/scooterDetail/:scooterId", async (req, res) => {
        res.status(220).send({error: "no scooter with that id"})
    }
 });
+
+
+
 
 export default userRouter;

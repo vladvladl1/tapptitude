@@ -1,7 +1,7 @@
 import mongoose, {Schema} from "mongoose";
 
 
-type Position = {type:string, coordinates:[number]};
+export type Position = {type:string, coordinates:[number]};
 
 export class Allop<T> {
     model = mongoose.Model;
@@ -43,6 +43,9 @@ export class Allop<T> {
     findById(id: string){
         const Id = new mongoose.Types.ObjectId(id);
         return this.model.findOne({"_id":Id});
+    }
+    findNearby(maxRange: number, position: Position){
+        return this.model.find({gpsCoordinates : {$near: {$geometry: position, $maxDistance: maxRange}}})
     }
     deleteByUsername (username: string){
         return this.model.deleteOne({"username": username});

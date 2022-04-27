@@ -51,11 +51,11 @@ authRouter.post("/register", async (req: Request<unknown, unknown, IUser>, res) 
     const thepass = body.password;
     const om =  await userService.findByEmail(body.email); // await findByEmail(body.email)
     if(om){
-           return res.status(201).send({error: "user already registered"});
+           return res.status(220).send({error: "user already registered"});
     }
     const man = await userService.findByUsername(body.username);
     if(man){
-        res.status(202).send({error: "username taken"});
+        res.status(220).send({error: "username taken"});
     }
     else{
         const enc = await bcrypt.genSalt(10);

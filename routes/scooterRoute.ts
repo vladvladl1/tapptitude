@@ -4,6 +4,7 @@ import { ScooterOp} from "../dbOperations/scooterop";
 import {Request} from "express";
 import {IScooter} from "../models/scooterInterface";
 import adminRouter from "./adminRouter";
+import {getByRadius} from "../controller/scooterController";
 
 
 const multer =  require("multer");
@@ -100,9 +101,11 @@ scooterRouter.get("/lockScooter/:scooterId", async(req , res) => {
         }
     }catch(err){
         console.log(err);
-        res.sendStatus(401);
+        res.sendStatus(220);
     }
 });
 
+
+scooterRouter.get("/getNearby", verificaToken, getByRadius);
 
 export default scooterRouter;
