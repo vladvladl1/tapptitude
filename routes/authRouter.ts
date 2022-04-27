@@ -105,6 +105,7 @@ authRouter.post("/login", async (req, res) => {
                 console.log("session username:" + session.username);
                 return res.status(200).send({user, token});
             }
+            res.status(220).send({error: "wrong passsword"});
         });
     }catch(err){
 
