@@ -36,7 +36,7 @@ export const stopRide = async (req, res, next) => {
     try{
         const rider = await rideSerice.findOngoingRideByUsername(username);
         let dateOfStop = new Date();
-        let time = dateOfStop.getTime() - rider.dateOfStart.getTime();
+        let time = parseInt(((dateOfStop.getTime() - rider.dateOfStart.getTime())/1000).toFixed(0));
         let price = time/1000;
         let goodPrice:number  = parseInt(price.toFixed(2));
         req.price = goodPrice;
