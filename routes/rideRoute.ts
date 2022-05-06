@@ -4,7 +4,7 @@ import {UserOp} from "../dbOperations/userop";
 import {ScooterOp} from "../dbOperations/scooterop";
 import {IRide} from "../models/rideInterface";
 import {Rides} from "../models/rideClass";
-import {history, startRide, stopRide} from "../controller/rideController";
+import {history, payment, startRide, stopRide} from "../controller/rideController";
 
 
 const multer =  require("multer");
@@ -22,14 +22,14 @@ rideRouter.get("/startRide", verificaToken, async (req, res) => {
 res.sendStatus(200);
 });
 
-rideRouter.get("/startRide", verificaToken, async (req, res) => {
+rideRouter.get("/stopRide", verificaToken, async (req, res) => {
 res.sendStatus(200);
 });
 
 rideRouter.get("/history", verificaToken, history);
 
 
-rideRouter.get("/stopRide/:scooterId", verificaToken, stopRide);
+rideRouter.get("/stopRide/:scooterId", verificaToken, stopRide, payment);
 
 
 rideRouter.get("/startRide/:scooterId", verificaToken, startRide);

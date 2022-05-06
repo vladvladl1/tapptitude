@@ -1,6 +1,7 @@
 import {Rides} from "../models/rideClass";
 import {IRide} from "../models/rideInterface";
 import {RideOp} from "../dbOperations/rideop";
+import {stripe} from "../Complementary/stripe"
 
 const rideSerice = new RideOp();
 
@@ -27,7 +28,7 @@ export const startRide = async (req, res) => {
 }
 
 
-export const stopRide = async (req, res) => {
+export const stopRide = async (req, res, next) => {
     const scooterId = req.params.scooterId;
     const userPos = req.body;
     const username = req.username;
@@ -37,6 +38,7 @@ export const stopRide = async (req, res) => {
         let dateOfStop = new Date();
         let time = dateOfStop.getTime() - rider.dateOfStart.getTime();
         let price = time/1000;
+        req.price = price;
         let stop = userPos;
         const ride = await rideSerice.updateStopRide(username, price, time, stop);
         res.status(200).send(ride);
@@ -44,6 +46,7 @@ export const stopRide = async (req, res) => {
         console.log(e);
         res.sendStatus(220);
     }
+    return next();
 }
 
 export const history = async (req, res) => {
@@ -54,5 +57,21 @@ export const history = async (req, res) => {
     }catch(e){
         console.log(e);
         res.sendStatus(220);
+    }
+}
+
+export const payment = async (req, res) => {
+    const username = req.username;
+    const price = req.price;
+    try{
+        let charge = await stripe.chrages.create(
+            {
+                amount:price,
+                currency:"ron",
+            }
+        )
+    }catch (err){
+        console.log(err);
+        res.status(400).send({error:"payment wrong"});
     }
 }
