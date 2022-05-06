@@ -29,8 +29,11 @@ res.sendStatus(200);
 rideRouter.get("/history", verificaToken, history);
 
 
-rideRouter.get("/stopRide/:scooterId", verificaToken, stopRide, payment);
+rideRouter.get("/stopRide/:scooterId", verificaToken, stopRide);
 
+rideRouter.post("/stopRide/:scooterId", verificaToken, stopRide);
+
+rideRouter.post("/pay", verificaToken, payment);
 
 rideRouter.get("/startRide/:scooterId", verificaToken, startRide);
 

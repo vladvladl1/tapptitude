@@ -38,15 +38,16 @@ export const stopRide = async (req, res, next) => {
         let dateOfStop = new Date();
         let time = dateOfStop.getTime() - rider.dateOfStart.getTime();
         let price = time/1000;
-        req.price = price;
+        let goodPrice:number  = parseInt(price.toFixed(2));
+        req.price = goodPrice;
         let stop = userPos;
-        const ride = await rideSerice.updateStopRide(username, price, time, stop);
-        res.status(200).send(ride);
+        const ride = await rideSerice.updateStopRide(username, goodPrice, time, stop);
+        res.status(200).send({ride});
     }catch (e){
         console.log(e);
         res.sendStatus(220);
     }
-    return next();
+
 }
 
 export const history = async (req, res) => {
@@ -61,17 +62,25 @@ export const history = async (req, res) => {
 }
 
 export const payment = async (req, res) => {
-    const username = req.username;
-    const price = req.price;
+    const price = req.body.price;
+    const paymentMethod = req.body.method;
     try{
-        let charge = await stripe.chrages.create(
+        let charge = await stripe.paymentIntents.create(
             {
-                amount:price,
+                amount:price*100,
                 currency:"ron",
+                payment_method_types: ['card'],
+
             }
-        )
+        );
+        const clientSecret = charge.client_secret;
+        const confirm = stripe.paymentIntents.confirm(charge.id, {payment_method: 'pm_card_visa'});
+
+        console.log(clientSecret);
+
+        res.status(200).send(confirm);
     }catch (err){
         console.log(err);
-        res.status(400).send({error:"payment wrong"});
+        res.status(400).send({error:"wrong payment"});
     }
 }
