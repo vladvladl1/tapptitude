@@ -9,6 +9,7 @@ import {IScooter} from "../models/scooterInterface";
 import {ScooterOp} from "../dbOperations/scooterop";
 import {UserOp} from "../dbOperations/userop";
 import {RideOp} from "../dbOperations/rideop";
+import {createScooter, getByDate, rideInfo, scooterInfo, suspend} from "../controller/adminController";
 
 const rideService = new RideOp();
 const userService = new UserOp();
@@ -25,60 +26,14 @@ adminRouter.get("/createScooter", async (req, res) => {
     res.sendStatus(200);
 });
 
-adminRouter.post("/createScooter", async(req: Request<unknown, unknown, IScooter>, res) => {
-    const {body} = req;
-    try {
-        const scooter = await scooterService.createObject(body);
-        res.status(200).send(scooter);
-    }catch(e){
-        console.log(e);
-        res.sendStatus(220);
-    }
-});
+adminRouter.post("/createScooter", createScooter);
 
-adminRouter.delete("/suspendUser", async(req, res) => {
-   const username = req.body.username;
-   try{
-       const user = userService.deleteByUsername(username);
-       res.sendStatus(200);
-   }catch(err){
-       res.sendStatus(220);
-       console.log(err);
-   }
-});
+adminRouter.delete("/suspendUser", suspend);
 
-adminRouter.get("/getByDate", async(req, res) => {
-    try{
-        const users = await userService.findBySortedDate();
-        res.status(200).send(users);
-    }catch(err){
-        console.log(err);
-        res.sendStatus(220);
-    }
-});
+adminRouter.get("/getByDate", getByDate);
 
-adminRouter.get("scooterInfo/:scooterId", async (req, res) => {
-   const scooterId = req.params.scooterId;
-    try{
-       const scooter = await scooterService.findByScooterId(scooterId);
-       if(scooter!==undefined){
-           res.status(200).send(scooter);
-       }
-   }catch(err){
-        res.status(220).send({error: "no scooter was find with that ID"});
-       console.log(err);
-   }
-});
+adminRouter.get("scooterInfo/:scooterId", scooterInfo);
 
-adminRouter.get("rideInfo/:rideId", async (req, res) => {
-    const id = req.params.rideId;
-    try{
-        const ride = await rideService.findById(id);
-        res.status(200).send(ride);
-    }catch(err){
-        res.status(220).send({error: "wrong data"});
-        console.log(err);
-    }
-});
+adminRouter.get("rideInfo/:rideId", rideInfo);
 
 export default adminRouter;

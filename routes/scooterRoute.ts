@@ -4,7 +4,16 @@ import { ScooterOp} from "../dbOperations/scooterop";
 import {Request} from "express";
 import {IScooter} from "../models/scooterInterface";
 import adminRouter from "./adminRouter";
-import {getByRadius} from "../controller/scooterController";
+import {
+    createScooter,
+    deleteScooters,
+    getAllScooters,
+    getByRadius,
+    lockScooter,
+    scooterDetail,
+    unlockScooter
+} from "../controller/scooterController";
+import userRouter from "./userRoute";
 
 
 const multer =  require("multer");
@@ -31,81 +40,18 @@ scooterRouter.get("/", async (req, res) => {
 });
 
 
-scooterRouter.post("/createScooter", async(req: Request<unknown, unknown, IScooter>, res) => {
-    const {body} = req;
-    try {
-        const scooter = await scooterService.createObject(body);
-        res.status(200).send(scooter);
-    }catch(e){
-        console.log(e);
-        res.sendStatus(220);
-    }
-});
+scooterRouter.post("/createScooter", createScooter);
 
-
-
-
-scooterRouter.post("/deleteScooters", async(req , res) => {
-    try{
-        const deleted = await scooterService.deleteAll();
-        res.sendStatus(200);
-    }catch (err){
-        console.log(err);
-        res.sendStatus(220);
-    }
-});
-
-scooterRouter.post("/getAllScooters", async(req , res) => {
-    try{
-        const finded = await scooterService.findAll();
-        res.status(200).send(finded);
-    }catch (err){
-        console.log(err);
-        res.sendStatus(220);
-    }
-});
-
-
-scooterRouter.get("/unlockScooter/:scooterId", async(req , res) => {
-    const { pin } = req.query;
-    const scooterId = req.params.scooterId;
-    console.log("un para: " + pin);
-    console.log("scooter id este  " + scooterId);
-    try {
-        const scooter = await scooterService.findByScooterId(scooterId);
-        if(scooter.pin == pin) {
-            const update = await scooterService.updateLockedByName(scooterId, "unlocked");
-            res.status(200).send(update);
-        }else{
-            res.status(220).send({error: "wrong pin"});
-        }
-    }catch(err){
-        console.log(err);
-        res.sendStatus(220);
-    }
-});
-
-
-
-scooterRouter.get("/lockScooter/:scooterId", async(req , res) => {
-    const { pin} = req.query;
-    const scooterId = req.params.scooterId;
-    console.log("params" + pin);
-    try {
-        const scooter = await scooterService.findByScooterId(scooterId);
-        if(scooter.pin == pin) {
-            const update = await scooterService.updateLockedByName(scooterId, "unlocked");
-            res.status(200).send(update);
-        }else{
-            res.status(220).send({error: "wrong pin"});
-        }
-    }catch(err){
-        console.log(err);
-        res.sendStatus(220);
-    }
-});
-
+scooterRouter.post("/deleteScooters", deleteScooters);
 
 scooterRouter.get("/getNearby", verificaToken, getByRadius);
+
+scooterRouter.post("/getAllScooters", getAllScooters);
+
+scooterRouter.get("/unlockScooter/:scooterId", unlockScooter);
+
+scooterRouter.get("/lockScooter/:scooterId", lockScooter);
+
+scooterRouter.get("/scooterDetail/:scooterId", verificaToken, scooterDetail);
 
 export default scooterRouter;
