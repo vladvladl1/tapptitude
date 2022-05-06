@@ -74,7 +74,7 @@ export const payment = async (req, res) => {
             }
         );
         const clientSecret = charge.client_secret;
-        const confirm = stripe.paymentIntents.confirm(charge.id, {payment_method: 'pm_card_visa'});
+        const confirm = stripe.paymentIntents.confirm(charge.id, {payment_method: paymentMethod});
 
         console.log(clientSecret);
 
