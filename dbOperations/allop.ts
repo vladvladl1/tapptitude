@@ -47,6 +47,9 @@ export class Allop<T> {
     findNearby(maxRange: number, position: Position){
         return this.model.find({gpsCoordinates : {$near: {$geometry: position, $maxDistance: maxRange}}})
     }
+    findNearbyById(scooterId: string, position: Position, range: number){
+        return this.model.findOne({gpsCoordinates : {$near: {$geometry: position, $maxDistance: range}}}, {})
+    }
     deleteByUsername (username: string){
         return this.model.deleteOne({"username": username});
     }

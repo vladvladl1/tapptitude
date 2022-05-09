@@ -70,7 +70,6 @@ export const payment = async (req, res) => {
                 amount:price*100,
                 currency:"ron",
                 payment_method_types: ['card'],
-
             }
         );
         const clientSecret = charge.client_secret;

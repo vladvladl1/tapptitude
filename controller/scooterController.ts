@@ -111,3 +111,15 @@ export const createScooter = async(req: Request<unknown, unknown, IScooter>, res
         res.sendStatus(220);
     }
 }
+
+export const pingScooter = async(req, res) => {
+    const scooterId = req.query;
+    const coordinates = req.body.coordinates;
+
+    try{
+        //const scooter = scooterService.findNearbyById();
+    }catch(err){
+
+    }
+
+}
