@@ -4,7 +4,7 @@ import {UserOp} from "../dbOperations/userop";
 import {ScooterOp} from "../dbOperations/scooterop";
 import {IRide} from "../models/rideInterface";
 import {Rides} from "../models/rideClass";
-import {history, payment, startRide, stopRide} from "../controller/rideController";
+import {history, paginatedHistory, payment, startRide, stopRide} from "../controller/rideController";
 
 
 const multer =  require("multer");
@@ -37,5 +37,6 @@ rideRouter.post("/pay", verificaToken, payment);
 
 rideRouter.post("/startRide/:scooterId", verificaToken, startRide);
 
+rideRouter.get("/paginatedHistory", verificaToken, paginatedHistory);
 
 export default rideRouter;

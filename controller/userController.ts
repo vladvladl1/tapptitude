@@ -132,7 +132,7 @@ export const modifyEmail = async(req, res) => {
 
 export const modifyUsername = async(req, res) =>{
     const username = req.username;
-    const newUsername = req.body.newUsername;
+    const newUsername = req.body.username;
     try{
         const existingUser = await userService.findByUsername(newUsername);
         if(existingUser!==null){

@@ -47,6 +47,12 @@ export class Allop<T> {
     findNearby(maxRange: number, position: Position){
         return this.model.find({gpsCoordinates : {$near: {$geometry: position, $maxDistance: maxRange}}})
     }
+    findPaginated(page:number, username:string){
+        return this.model.find({"username":username}).skip(page).limit(10);
+    }
+    findNumberOfDocumentsWithUsername(username:string){
+        return this.model.find({"username":username}).count();
+    }
     findNearbyById(scooterId: string, position: Position, maxRange: number){
         return this.model.find({"scooterId": scooterId, gpsCoordinates : {$near: {$geometry: position, $maxDistance: maxRange}}});
     }

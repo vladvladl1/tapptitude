@@ -4,7 +4,7 @@ import {RideOp} from "../dbOperations/rideop";
 import {stripe} from "../Complementary/stripe"
 import {Position} from "../dbOperations/allop";
 
-const rideSerice = new RideOp();
+const rideService = new RideOp();
 
 export const startRide = async (req, res) => {
     const scooterId = req.params.scooterId;
@@ -13,7 +13,7 @@ export const startRide = async (req, res) => {
     console.log("asta este username " +  req.username);
 
     try{
-        const rider = await rideSerice.findOngoingRideByUsername(username);
+        const rider = await rideService.findOngoingRideByUsername(username);
         if(userPos.type!=="Point"){
            return res.status(400).send({error:"type of coordinates must be a valid one"});
         }
@@ -26,7 +26,7 @@ export const startRide = async (req, res) => {
             const obj = new Rides(username, scooterId, price, time, start, stop, dateOfStart);
             console.log("obj user " + obj.username);
 
-            const ride = rideSerice.createObject(<IRide>obj);
+            const ride = rideService.createObject(<IRide>obj);
             res.status(200).send(ride);
         }else{
             res.status(400).send({error:"you have already started a ride"});
@@ -46,14 +46,14 @@ export const stopRide = async (req, res, next) => {
         if(userPos.type!=="Point"){
             return res.status(400).send({error:"type of coordinates must be a valid one"});
         }
-        const rider = await rideSerice.findOngoingRideByUsername(username);
+        const rider = await rideService.findOngoingRideByUsername(username);
         let dateOfStop = new Date();
         let time = parseInt(((dateOfStop.getTime() - rider.dateOfStart.getTime())/1000).toFixed(0));
         let price = time/1000;
         let goodPrice:number  = parseInt(price.toFixed(2));
         req.price = goodPrice;
         let stop: Position= userPos;
-        const ride = await rideSerice.updateStopRide(username, goodPrice, time, stop);
+        const ride = await rideService.updateStopRide(username, goodPrice, time, stop);
         res.status(200).send({goodPrice, time, stop});
     }catch (e){
         console.log(e);
@@ -65,7 +65,7 @@ export const stopRide = async (req, res, next) => {
 export const history = async (req, res) => {
     const username = req.username;
     try{
-        const rides = await rideSerice.findAllByUsername(username);
+        const rides = await rideService.findAllByUsername(username);
         res.status(200).send(rides);
     }catch(e){
         console.log(e);
@@ -93,5 +93,25 @@ export const payment = async (req, res) => {
     }catch (err){
         console.log(err);
         res.status(400).send({error:"wrong payment"});
+    }
+}
+
+export const paginatedHistory = async(req, res) => {
+    const username = req.username;
+    let page = req.query.page;
+    try{
+        page = page*10;
+        console.log(page);
+        const history = await rideService.findPaginated(page, username);
+        const numberOfDocuments = await rideService.findNumberOfDocumentsWithUsername(username);
+
+        if(history===null || numberOfDocuments===null){
+            res.status(400).send({error:"nothing to show"});
+        }else{
+            res.status(200).send({history, numberOfDocuments});
+        }
+    }catch(err){
+        console.log(err);
+        res.status(400).send({error:"error finding paginated documents"});
     }
 }
