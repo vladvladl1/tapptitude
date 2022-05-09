@@ -106,3 +106,59 @@ export const savedl =  async (req, res) => {
         console.log(err);
     }
 }
+
+export const modifyEmail = async(req, res) => {
+    const email = req.body.email;
+    const username = req.username;
+    try {
+
+        const newEmailUser = await userService.findByEmail(email);
+        if (newEmailUser !== null) {
+            res.status(400).send({error: "email already registered"});
+        } else {
+            const user = await userService.updateEmail(username, email);
+            res.status(200).send(user);
+        }
+
+    }catch(err){
+        console.log(err);
+        res.status(400).send({error: "username wrong"});
+    }
+}
+
+export const modifyUsername = async(req, res) =>{
+    const username = req.username;
+    const newUsername = req.body.newUsername;
+    try{
+        const existingUser = await userService.findByUsername(newUsername);
+        if(existingUser!==null){
+            console.log("user is "+ existingUser);
+            res.status(400).send({error: "username already registered"});
+        }else{
+            const user = await userService.updateUsername(username, newUsername);
+            res.status(200).send(user);
+        }
+    }catch(err){
+        res.status(400).send({error:"username wrong"});
+    }
+}
+
+export const modifyBoth = async( req, res) => {
+    const username = req.username;
+    const newUsername = req.body.username;
+    const email = req.body.email;
+    try{
+        const existingUsername = await userService.findByUsername(newUsername);
+        const existingEmail = await userService.findByEmail(email);
+        if(existingEmail!==null || existingUsername!==null){
+            res.status(400).send({error:"wrong username"});
+        }else{
+            const user = await userService.updateEmail(username, email);
+            const user1 = await userService.updateUsername(username, newUsername);
+            res.status(200).send(user1);
+        }
+    }catch(err){
+        console.log(err);
+        res.status(400).send({error:"username wrong"});
+    }
+}

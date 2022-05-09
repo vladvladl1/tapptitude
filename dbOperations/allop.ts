@@ -65,6 +65,12 @@ export class Allop<T> {
     updateLockedByPin (pin: number, locked: string){
         return this.model.updateOne({"pin": pin}, {$set: {"lockedStatus": locked}});
     }
+    updateEmail(username: string, email: string){
+        return this.model.updateOne({"username": username}, {$set: {"email": email}});
+    }
+    updateUsername(username: string, newUsername: string){
+        return this.model.updateOne({"username":username}, {$set: {"username": newUsername}});
+    }
     updateDlByUsername(username: string, drivingLicence:string){
         return this.model.updateOne({"username": username}, {$set: {"drivingLicense":drivingLicence}});
     }

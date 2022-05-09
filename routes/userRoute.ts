@@ -3,7 +3,15 @@ import {verificaToken} from "../middlewares/verifyToken";
 import {ResourceService} from "../Complementary/s3drivingLicense";
 import {UserOp} from "../dbOperations/userop";
 import {ScooterOp} from "../dbOperations/scooterop";
-import {changePassword, forgotPassword, getdl, getMe, savedl} from "../controller/userController";
+import {
+    changePassword,
+    forgotPassword,
+    getdl,
+    getMe, modifyBoth,
+    modifyEmail,
+    modifyUsername,
+    savedl
+} from "../controller/userController";
 const multer =  require("multer");
 const upload = multer()
 
@@ -52,6 +60,11 @@ userRouter.post("forgotPassword", forgotPassword);
 
 userRouter.post("/getMe", verificaToken , getMe);
 
+userRouter.patch("/upUsername", verificaToken, modifyUsername);
+
+userRouter.patch("upEmail", verificaToken, modifyEmail);
+
+userRouter.patch("upBoth", verificaToken, modifyBoth);
 
 
 
