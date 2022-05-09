@@ -100,6 +100,7 @@ export const paginatedHistory = async(req, res) => {
     const username = req.username;
     let page = req.query.page;
     try{
+        page = page -1;
         page = page*10;
         console.log(page);
         const history = await rideService.findPaginated(page, username);
