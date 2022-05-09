@@ -2,6 +2,7 @@ import {Rides} from "../models/rideClass";
 import {IRide} from "../models/rideInterface";
 import {RideOp} from "../dbOperations/rideop";
 import {stripe} from "../Complementary/stripe"
+import {Position} from "../dbOperations/allop";
 
 const rideSerice = new RideOp();
 
@@ -40,15 +41,16 @@ export const stopRide = async (req, res, next) => {
     const username = req.username;
 
     try{
+        console.log("this is ")
         const rider = await rideSerice.findOngoingRideByUsername(username);
         let dateOfStop = new Date();
         let time = parseInt(((dateOfStop.getTime() - rider.dateOfStart.getTime())/1000).toFixed(0));
         let price = time/1000;
         let goodPrice:number  = parseInt(price.toFixed(2));
         req.price = goodPrice;
-        let stop = userPos;
+        let stop: Position= userPos;
         const ride = await rideSerice.updateStopRide(username, goodPrice, time, stop);
-        res.status(200).send({ride});
+        res.status(200).send({goodPrice, time, stop});
     }catch (e){
         console.log(e);
         res.sendStatus(220);
