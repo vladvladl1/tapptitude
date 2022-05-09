@@ -14,7 +14,9 @@ export const startRide = async (req, res) => {
 
     try{
         const rider = await rideSerice.findOngoingRideByUsername(username);
-
+        if(userPos.type!=="Point"){
+           return res.status(400).send({error:"type of coordinates must be a valid one"});
+        }
         if(rider ===null){
             const price = 0;
             const time=0;
@@ -41,7 +43,9 @@ export const stopRide = async (req, res, next) => {
     const username = req.username;
 
     try{
-        console.log("this is ")
+        if(userPos.type!=="Point"){
+            return res.status(400).send({error:"type of coordinates must be a valid one"});
+        }
         const rider = await rideSerice.findOngoingRideByUsername(username);
         let dateOfStop = new Date();
         let time = parseInt(((dateOfStop.getTime() - rider.dateOfStart.getTime())/1000).toFixed(0));
