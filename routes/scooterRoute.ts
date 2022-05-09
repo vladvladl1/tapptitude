@@ -9,7 +9,7 @@ import {
     deleteScooters,
     getAllScooters,
     getByRadius,
-    lockScooter,
+    lockScooter, pingScooter,
     scooterDetail,
     unlockScooter
 } from "../controller/scooterController";
@@ -53,5 +53,7 @@ scooterRouter.get("/unlockScooter/:scooterId", unlockScooter);
 scooterRouter.get("/lockScooter/:scooterId", lockScooter);
 
 scooterRouter.get("/scooterDetail/:scooterId", verificaToken, scooterDetail);
+
+scooterRouter.post("/ping/:scooterId", verificaToken, pingScooter);
 
 export default scooterRouter;

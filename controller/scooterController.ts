@@ -113,13 +113,21 @@ export const createScooter = async(req: Request<unknown, unknown, IScooter>, res
 }
 
 export const pingScooter = async(req, res) => {
-    const scooterId = req.query;
-    const coordinates = req.body.coordinates;
+    const scooterId = req.params.scooterId;
+    const userPos:Position = req.body;
 
     try{
-        //const scooter = scooterService.findNearbyById();
+        const scooter = await scooterService.findNearbyById(scooterId, userPos, 100);
+        if(scooter===null){
+            res.status(400).send({error:"scooter is too far"});
+            return false;
+        }else{
+            res.status(200).send({scooter});
+            return true;
+        }
     }catch(err){
-
+        console.log(err);
+        res.status(400).send({error:"error pinging scooter"});
     }
 
 }
