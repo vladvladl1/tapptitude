@@ -145,7 +145,7 @@ export const modifyUsername = async(req, res) =>{
             const sess = <ISession>{username: newUsername, token: token};
             const session = await sessionService.createObject(sess);
             if(session!=null){
-                res.status.send(token);
+                res.status(200).send({token});
             }else {
                 res.status(200).send({error:"couldn't create new session"});
             }
