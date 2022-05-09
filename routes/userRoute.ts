@@ -62,9 +62,9 @@ userRouter.post("/getMe", verificaToken , getMe);
 
 userRouter.patch("/upUsername", verificaToken, modifyUsername);
 
-userRouter.patch("upEmail", verificaToken, modifyEmail);
+userRouter.patch("/upEmail", verificaToken, modifyEmail);
 
-userRouter.patch("upBoth", verificaToken, modifyBoth);
+userRouter.patch("/upBoth", verificaToken, modifyBoth);
 
 
 
