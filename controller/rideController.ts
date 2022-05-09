@@ -12,16 +12,21 @@ export const startRide = async (req, res) => {
     console.log("asta este username " +  req.username);
 
     try{
-        const price = 0;
-        const time=0;
-        const start = userPos;
-        const stop = userPos;
-        const dateOfStart = new Date();
-        const obj = new Rides(username, scooterId, price, time, start, stop, dateOfStart);
-        console.log("obj user " + obj.username);
+        const rider = await rideSerice.findByUsername(username);
+        if(rider.time === 0 || rider ===null){
+            const price = 0;
+            const time=0;
+            const start = userPos;
+            const stop = userPos;
+            const dateOfStart = new Date();
+            const obj = new Rides(username, scooterId, price, time, start, stop, dateOfStart);
+            console.log("obj user " + obj.username);
 
-        const ride = rideSerice.createObject(<IRide>obj);
-        res.status(200).send(ride);
+            const ride = rideSerice.createObject(<IRide>obj);
+            res.status(200).send(ride);
+        }else{
+            res.status(400).send({error:"you have already started a ride"});
+        }
     }catch (e){
         console.log(e);
     }
