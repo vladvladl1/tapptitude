@@ -12,8 +12,9 @@ export const startRide = async (req, res) => {
     console.log("asta este username " +  req.username);
 
     try{
-        const rider = await rideSerice.findByUsername(username);
-        if(rider.time === 0 || rider ===null){
+        const rider = await rideSerice.findOngoingRideByUsername(username);
+
+        if(rider ===null){
             const price = 0;
             const time=0;
             const start = userPos;
