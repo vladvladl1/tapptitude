@@ -1,8 +1,12 @@
 import {UserOp} from "../dbOperations/userop";
 import {ResourceService} from "../Complementary/s3drivingLicense";
+import {SessionOp} from "../dbOperations/sessionop";
+import {ISession} from "../models/sessionInterface";
 
+const sessionService = new SessionOp();
 const userService = new UserOp();
 const bcrypt = require("bcrypt");
+const jwt  = require("jsonwebtoken");
 
 export const getMe = async(req, res ) => {
     const username = req.username;
@@ -135,10 +139,19 @@ export const modifyUsername = async(req, res) =>{
             console.log("user is "+ existingUser);
             res.status(400).send({error: "username already registered"});
         }else{
+            const deleted = await sessionService.deleteByUsername(req.username);
             const user = await userService.updateUsername(username, newUsername);
-            res.status(200).send(user);
+            const token = jwt.sign({username: newUsername}, process.env.jwtsecret);
+            const sess = <ISession>{username: newUsername, token: token};
+            const session = await sessionService.createObject(sess);
+            if(session!=null){
+                res.status.send(token);
+            }else {
+                res.status(200).send({error:"couldn't create new session"});
+            }
         }
     }catch(err){
+        console.log(err);
         res.status(400).send({error:"username wrong"});
     }
 }
