@@ -118,37 +118,43 @@ export const paginatedHistory = async(req, res) => {
 }
 
 function giveMeDistance(lat1: number, lat2:number, long1:number, long2: number){
-    const earthRadius:number = 6378.1370;
-    const rad = Math.PI/180;
-    let dlong:number = (long2-long1)*rad;
-    let dlat:number = (lat2 - lat1)*rad;
-    let a:number = Math.pow(Math.sin(dlat/2.0), 2) + Math.cos(lat1*rad) + Math.cos(lat2*rad) + Math.pow(Math.sin(dlong/2.0), 2);
-    let b:number = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return 3956 * b;
+    //const earthRadius:number = 6378.1370;
+    let p = 0.017453292519943295;    // Math.PI / 180
+    let c = Math.cos;
+    let a = 0.5 - c((lat2 - lat1) * p)/2 +
+        c(lat1 * p) * c(lat2 * p) *
+        (1 - c((long2 - long1) * p))/2;
+    let c1 = 12742 * Math.asin(Math.sqrt(a));
+    console.log(c1);
+    return c1; // 2 * R; R = 6371 km
 
 }
 
 export const distance = async (req, res) => {
     const username = req.username;
-    const inter = req.body.intermediary;
+    const coordinates = req.body.coordinates;
     try{
         const ride = await rideService.findOngoingRideByUsername(username);
-        if(inter.coordinates[0]<-90 || inter.coordinates[0]>90){
+        if(coordinates[0]<-90 || coordinates[0]>90){
             return res.status(400).send({error:"invalid coordinates"});
         }
-        if(inter.coordinates[0]<-180 || inter.coordinates[0]>180){
+        if(coordinates[0]<-180 || coordinates[0]>180){
             return res.status(400).send({error:"invalid coordinates"});
         }
         if(ride.intermediary.coordinates === [0,0] && ride.start.coordinates !== ride.intermediary.coordinates){
             ride.intermediary.coordinates = ride.start.coordinates;
         }else{
-            let dist = giveMeDistance(ride.intermediary.coordinates[0], inter.coordinates[0],ride.intermediary.coordinates[1], inter.coordinates[1]);
-            ride.intermediary.coordinates = inter.coordinates;
-            const rider = await rideService.updateOngoingRide(username, ride.intermediary.coordinates, dist);
-            res.status(200).send(dist);
+            let dist = giveMeDistance(coordinates[0], ride.intermediary.coordinates[0], coordinates[1], ride.intermediary.coordinates[1]);
+            ride.intermediary.coordinates = coordinates;
+            console.log("rided inter "+ ride.intermediary.coordinates);
+            console.log("inter" + coordinates[0]);
+            console.log("distanta este "+ dist);
+            await rideService.updateOngoingRide(username, ride.intermediary.coordinates, dist);
+            res.status(200).send({dist});
         }
     }catch(err){
         console.log(err);
         res.status(400).send();
     }
 }
+

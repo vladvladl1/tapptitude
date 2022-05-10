@@ -120,10 +120,10 @@ export const pingScooter = async(req, res) => {
         const scooter = await scooterService.findNearbyById(scooterId, userPos, 100);
         if(scooter===null){
             res.status(400).send({error:"scooter is too far"});
-            return false;
+
         }else{
             res.status(200).send({scooter});
-            return true;
+
         }
     }catch(err){
         console.log(err);
