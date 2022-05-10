@@ -7,6 +7,8 @@ export class Rides{
     time: number;
     start: {type:string, coordinates: [number]};
     stop: {type:string, coordinates: [number]};
+    intermediary: {type:string, coordinates: [number]};
+    distance:number;
     dateOfStart: Date;
 
     constructor(username, scooterId, price, time, start, stop, dateOfStart) {
