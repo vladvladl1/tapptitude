@@ -51,15 +51,15 @@ export const stopRide = async (req, res, next) => {
         const rider = await rideService.findOngoingRideByUsername(username);
         let dateOfStop = new Date();
         let time = parseInt(((dateOfStop.getTime() - rider.dateOfStart.getTime())/1000).toFixed(0));
-        let price = time/1000;
-        let goodPrice:number  = parseInt(price.toFixed(2));
-        req.price = goodPrice;
+        let price1 = time/1000;
+        let price:number  = parseInt(price1.toFixed(2));
+        req.price = price;
         let stop: Position= userPos;
         let start = rider.start;
         let intermediary = rider.intermediary;
         let distance = rider.distance;
-        const ride = await rideService.updateStopRide(username, goodPrice, time, stop);
-        res.status(200).send({goodPrice, time, start, intermediary, stop, distance});
+        const ride = await rideService.updateStopRide(username, price, time, stop);
+        res.status(200).send({price, time, start, intermediary, stop, distance});
     }catch (e){
         console.log(e);
         res.sendStatus(220);

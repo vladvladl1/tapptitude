@@ -7,5 +7,5 @@ export interface IScooter extends Document {
     bookedStatus: string,
     lastSeenDate: Date,
     pin: number,
-    gpsCoordinates: {type:string, coordinates: [number]}
+    gpsCoordinates: {type:string, coordinates: [number, number]}
 }
