@@ -2,9 +2,11 @@ import { Request, Response, NextFunction } from "express";
 const jwt = require("jsonwebtoken");
 import {IUser} from "../models/userInterface";
 import {UserOp} from "../dbOperations/userop";
+import {SessionOp} from "../dbOperations/sessionop";
 require("dotenv").config({path:"../.env"});
 
 const userService = new UserOp();
+const sessionService = new SessionOp();
 
 export const verificaToken = async (req: Request & {username:string}, res: Response, next: NextFunction) => {
 
@@ -34,11 +36,21 @@ export const verificaToken = async (req: Request & {username:string}, res: Respo
     const decoded = jwt.decode(JSON.parse(token));
     console.log(decoded);
     console.log(decoded.username);
+
     if (decoded === undefined || decoded.username === undefined) {
         console.log("3");
         return res.sendStatus(401);
     }
-
+    try{
+        const user = await userService.findByUsername(decoded.username);
+        if(user.status === "suspended"){
+            const sess = await sessionService.findByUsername(user.username);
+            const something = await sessionService.deleteByUsername(sess.username);
+            return res.status(400).send({error:"user is suspended"});
+        }
+    }catch (err){
+        console.log(err);
+    }
     req.username = decoded.username;
     console.log(req.username);
     //res.status(200).send(decoded.username);

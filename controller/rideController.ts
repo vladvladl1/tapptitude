@@ -3,8 +3,10 @@ import {IRide} from "../models/rideInterface";
 import {RideOp} from "../dbOperations/rideop";
 import {stripe} from "../Complementary/stripe"
 import {Position} from "../dbOperations/allop";
+import {ScooterOp} from "../dbOperations/scooterop";
 
 const rideService = new RideOp();
+const scooterService = new ScooterOp();
 
 export const startRide = async (req, res) => {
     const scooterId = req.params.scooterId;
@@ -135,6 +137,7 @@ export const distance = async (req, res) => {
     const coordinates = req.body.coordinates;
     try{
         const ride = await rideService.findOngoingRideByUsername(username);
+        const scooter = await scooterService.findByScooterId(ride.scooterId);
         if(coordinates[0]<-90 || coordinates[0]>90){
             return res.status(400).send({error:"invalid coordinates"});
         }
@@ -149,12 +152,31 @@ export const distance = async (req, res) => {
             console.log("rided inter "+ ride.intermediary.coordinates);
             console.log("inter" + coordinates[0]);
             console.log("distanta este "+ dist);
+            const battery = scooter.battery;
+            const actualDate = new Date();
+            const time = parseInt(((actualDate.getTime() - ride.dateOfStart.getTime())/1000).toFixed(0));;
+            const distance  = ride.distance;
             await rideService.updateOngoingRide(username, ride.intermediary.coordinates, dist);
             res.status(200).send({dist});
         }
     }catch(err){
         console.log(err);
         res.status(400).send();
+    }
+}
+
+export const ongoingRide = async(req, res) => {
+    const username = req.username;
+    try{
+        const ride = await rideService.findOngoingRideByUsername(username);
+        if(ride!==null){
+            res.status(200).send({ride});
+        }else{
+            res.status(400).send({error:"no ongoing ride for this user"});
+        }
+    }catch (err){
+        console.log(err);
+        res.status(400).send({error:"error sending good ride"});
     }
 }
 

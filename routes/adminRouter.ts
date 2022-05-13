@@ -9,7 +9,14 @@ import {IScooter} from "../models/scooterInterface";
 import {ScooterOp} from "../dbOperations/scooterop";
 import {UserOp} from "../dbOperations/userop";
 import {RideOp} from "../dbOperations/rideop";
-import {createScooter, getByDate, rideInfo, scooterInfo, suspend} from "../controller/adminController";
+import {
+    createScooter,
+    getByDate,
+    rideInfo,
+    scooterInfo,
+    suspendUser,
+    unsuspendUser
+} from "../controller/adminController";
 
 const rideService = new RideOp();
 const userService = new UserOp();
@@ -28,12 +35,16 @@ adminRouter.get("/createScooter", async (req, res) => {
 
 adminRouter.post("/createScooter", createScooter);
 
-adminRouter.delete("/suspendUser", suspend);
+
 
 adminRouter.get("/getByDate", getByDate);
 
 adminRouter.get("scooterInfo/:scooterId", scooterInfo);
 
 adminRouter.get("rideInfo/:rideId", rideInfo);
+
+adminRouter.patch("/suspendUser/:username", suspendUser);
+
+adminRouter.patch("/unsuspendUser/:username", unsuspendUser);
 
 export default adminRouter;

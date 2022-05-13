@@ -8,4 +8,5 @@ export interface IUser extends Document{
     drivingLicense: string;
     profilePicture: string;
     date: Date;
+    status: string;
 }

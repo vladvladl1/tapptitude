@@ -43,16 +43,6 @@ export const getByDate = async(req, res) => {
     }
 }
 
-export const suspend = async(req, res) => {
-    const username = req.body.username;
-    try{
-        const user = userService.deleteByUsername(username);
-        res.sendStatus(200);
-    }catch(err){
-        res.sendStatus(220);
-        console.log(err);
-    }
-}
 
 export const createScooter = async(req: Request<unknown, unknown, IScooter>, res) => {
     const {body} = req;
@@ -62,5 +52,36 @@ export const createScooter = async(req: Request<unknown, unknown, IScooter>, res
     }catch(e){
         console.log(e);
         res.sendStatus(220);
+    }
+}
+
+export const suspendUser = async (req, res) => {
+    const username = req.params.username;
+    try{
+        const user = await userService.findByUsername(username);
+        if(user!==null) {
+            await userService.updateUserStatus(username, "suspended");
+            res.sendStatus(200);
+        }else{
+            res.status(400).send({error:"no user found"});
+        }
+    }catch(err){
+        res.sendStatus(400);
+        console.log(err);
+    }
+}
+export const unsuspendUser = async (req, res) => {
+    const username = req.params.username;
+    try{
+        const user = await userService.findByUsername(username);
+        if(user!==null) {
+            await userService.updateUserStatus(username, "active");
+            res.sendStatus(200);
+        }else{
+            res.status(400).send({error:"no user found"});
+        }
+    }catch(err){
+        res.sendStatus(400);
+        console.log(err);
     }
 }

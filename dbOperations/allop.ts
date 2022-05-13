@@ -89,5 +89,8 @@ export class Allop<T> {
     updateOngoingRide(username:string, intermediary: Position, distance:number){
         return this.model.updateOne({"username": username, "time": 0}, {$set: {"intermediary":intermediary, distance:distance}});
     }
+    updateUserStatus(username:string, status:string){
+        return this.model.updateOne({"username": username}, {$set: {"status":status}});
+    }
 
 }

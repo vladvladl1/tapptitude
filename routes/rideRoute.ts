@@ -4,7 +4,15 @@ import {UserOp} from "../dbOperations/userop";
 import {ScooterOp} from "../dbOperations/scooterop";
 import {IRide} from "../models/rideInterface";
 import {Rides} from "../models/rideClass";
-import {distance, history, paginatedHistory, payment, startRide, stopRide} from "../controller/rideController";
+import {
+    distance,
+    history,
+    ongoingRide,
+    paginatedHistory,
+    payment,
+    startRide,
+    stopRide
+} from "../controller/rideController";
 
 
 const multer =  require("multer");
@@ -25,6 +33,8 @@ res.sendStatus(200);
 rideRouter.get("/stopRide", verificaToken, async (req, res) => {
 res.sendStatus(200);
 });
+
+rideRouter.get("/ongoing", verificaToken, ongoingRide);
 
 rideRouter.get("/history", verificaToken, history);
 

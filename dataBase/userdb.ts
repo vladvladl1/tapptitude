@@ -8,7 +8,8 @@ const userSchema = new Schema({
     password: {type: String},
     drivingLicense: {type: String, default: ''},
     profilePicture: {type: String, default: ''},
-    date: {type: Date}
+    date: {type: Date},
+    status: {type: String, default: 'active'}
 });
 
 const userModel = mongoose.model<IUser>("user", userSchema);
