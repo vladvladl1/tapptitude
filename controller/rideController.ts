@@ -55,8 +55,9 @@ export const stopRide = async (req, res, next) => {
         let stop: Position= userPos;
         let start = rider.start;
         let intermediary = rider.intermediary;
+        let distance = rider.distance;
         const ride = await rideService.updateStopRide(username, goodPrice, time, stop);
-        res.status(200).send({goodPrice, time, start, intermediary, stop});
+        res.status(200).send({goodPrice, time, start, intermediary, stop, distance});
     }catch (e){
         console.log(e);
         res.sendStatus(220);
