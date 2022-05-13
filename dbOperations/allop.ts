@@ -49,7 +49,7 @@ export class Allop<T> {
     }
     findPaginated(page:number, username:string){
         return this.model.aggregate([{ '$match'    : { "username" : username }}, {$sort: {"dateOfStart": -1}},{$facet: {
-                metadata: [ { $count: "total" } ],
+                metadata:  [{ $count: "total" }, { $addFields: { page: page/10 + 1}}] ,
                 data: [ { $skip: page }, { $limit: 10 } ]
             }}]);
     }
