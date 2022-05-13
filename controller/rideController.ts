@@ -104,12 +104,10 @@ export const paginatedHistory = async(req, res) => {
         page = page*10;
         console.log(page);
         const history = await rideService.findPaginated(page, username);
-        const numberOfDocuments = await rideService.findNumberOfDocumentsWithUsername(username);
-
-        if(history===null || numberOfDocuments===null){
+        if(history===null){
             res.status(400).send({error:"nothing to show"});
         }else{
-            res.status(200).send({history, numberOfDocuments});
+            res.status(200).send({history});
         }
     }catch(err){
         console.log(err);

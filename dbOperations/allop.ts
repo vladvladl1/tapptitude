@@ -48,7 +48,10 @@ export class Allop<T> {
         return this.model.find({gpsCoordinates : {$near: {$geometry: position, $maxDistance: maxRange}}})
     }
     findPaginated(page:number, username:string){
-        return this.model.find({"username":username}).skip(page).limit(10);//aggregate
+        return this.model.aggregate([{ '$match'    : { "username" : username }}, {$sort: {"dateOfStart": -1}},{$facet: {
+                metadata: [ { $count: "total" } ],
+                data: [ { $skip: page }, { $limit: 10 } ]
+            }}]);
     }
     findNumberOfDocumentsWithUsername(username:string){
         return this.model.find({"username":username}).count();
