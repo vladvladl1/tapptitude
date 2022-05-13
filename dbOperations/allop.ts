@@ -2,7 +2,7 @@ import mongoose, {Schema} from "mongoose";
 
 
 export type Position = {type:string, coordinates:[number]};
-
+//modificare operatii geneerice
 export class Allop<T> {
     model = mongoose.Model;
 
@@ -69,7 +69,7 @@ export class Allop<T> {
         return this.model.updateOne({"username": username}, {$set: {"password": password}});
     }
     updateLockedByName (name: string, locked: string){
-        return this.model.updateOne({"scooterName": name}, {$set: {"lockedStatus": locked}});
+        return this.model.updateOne({"scooterId": name}, {$set: {"lockedStatus": locked}});
     }
     updateLockedByPin (pin: number, locked: string){
         return this.model.updateOne({"pin": pin}, {$set: {"lockedStatus": locked}});

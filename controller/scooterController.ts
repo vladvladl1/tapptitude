@@ -44,14 +44,15 @@ export const scooterDetail =  async (req, res) => {
 }
 
 export const lockScooter = async(req , res) => {
-    const { pin} = req.query;
+    const  pin = req.body.pin;
     const scooterId = req.params.scooterId;
-    console.log("params" + pin);
+    console.log("pin " + pin);
+    console.log("params" + scooterId);
     try {
         const scooter = await scooterService.findByScooterId(scooterId);
         if(scooter.pin == pin) {
             const update = await scooterService.updateLockedByName(scooterId, "locked");
-            res.status(200).send(update);
+            return res.status(200).send({update});
         }else{
             res.status(220).send({error: "wrong pin"});
         }
@@ -62,7 +63,7 @@ export const lockScooter = async(req , res) => {
 }
 
 export const unlockScooter = async(req , res) => {
-    const { pin } = req.query;
+    const  pin  =   req.body.pin;
     const scooterId = req.params.scooterId;
     console.log("un para: " + pin);
     console.log("scooter id este  " + scooterId);
@@ -70,7 +71,7 @@ export const unlockScooter = async(req , res) => {
         const scooter = await scooterService.findByScooterId(scooterId);
         if(scooter.pin == pin) {
             const update = await scooterService.updateLockedByName(scooterId, "unlocked");
-            res.status(200).send(update);
+            return res.status(200).send({update});
         }else{
             res.status(220).send({error: "wrong pin"});
         }
@@ -131,3 +132,4 @@ export const pingScooter = async(req, res) => {
     }
 
 }
+

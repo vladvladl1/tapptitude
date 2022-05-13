@@ -48,12 +48,13 @@ scooterRouter.get("/getNearby", verificaToken, getByRadius);
 
 scooterRouter.post("/getAllScooters", getAllScooters);
 
-scooterRouter.get("/unlockScooter/:scooterId", unlockScooter);
-
-scooterRouter.get("/lockScooter/:scooterId", lockScooter);
-
 scooterRouter.get("/scooterDetail/:scooterId", verificaToken, scooterDetail);
 
 scooterRouter.post("/ping/:scooterId", verificaToken, pingScooter);
+
+
+scooterRouter.patch("/unlockScooter/:scooterId", unlockScooter);
+
+scooterRouter.patch("/lockScooter/:scooterId", lockScooter);
 
 export default scooterRouter;

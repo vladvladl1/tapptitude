@@ -53,8 +53,10 @@ export const stopRide = async (req, res, next) => {
         let goodPrice:number  = parseInt(price.toFixed(2));
         req.price = goodPrice;
         let stop: Position= userPos;
+        let start = rider.start;
+        let intermediary = rider.intermediary;
         const ride = await rideService.updateStopRide(username, goodPrice, time, stop);
-        res.status(200).send({goodPrice, time, stop});
+        res.status(200).send({goodPrice, time, start, intermediary, stop});
     }catch (e){
         console.log(e);
         res.sendStatus(220);
@@ -125,7 +127,6 @@ function giveMeDistance(lat1: number, lat2:number, long1:number, long2: number){
     let c1 = 12742 * Math.asin(Math.sqrt(a));
     console.log(c1);
     return c1; // 2 * R; R = 6371 km
-
 }
 
 export const distance = async (req, res) => {
@@ -156,3 +157,4 @@ export const distance = async (req, res) => {
     }
 }
 
+//response update baterie, timpul, distanta
