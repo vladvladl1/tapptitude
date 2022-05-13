@@ -3,11 +3,13 @@ import {ScooterOp} from "../dbOperations/scooterop";
 import {UserOp} from "../dbOperations/userop";
 import {Request} from "express";
 import {IScooter} from "../models/scooterInterface";
+import {SessionOp} from "../dbOperations/sessionop";
 
 
 const rideService = new RideOp();
 const scooterService = new ScooterOp();
 const userService = new UserOp();
+const sessionService = new SessionOp();
 
 export const rideInfo = async (req, res) => {
     const id = req.params.rideId;
@@ -61,6 +63,8 @@ export const suspendUser = async (req, res) => {
         const user = await userService.findByUsername(username);
         if(user!==null) {
             await userService.updateUserStatus(username, "suspended");
+            const sess = await sessionService.findByUsername(username);
+            const something = await sessionService.deleteByUsername(sess.username);
             res.sendStatus(200);
         }else{
             res.status(400).send({error:"no user found"});

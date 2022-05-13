@@ -25,6 +25,9 @@ export const logout = async (req, res) => {
 export const login = async (req, res) => {
     try {
         const user = await userService.findByEmail(req.body.email);
+        if(user.status === "suspended"){
+            return res.status(220).send({error:"user suspended"});
+        }
         const enc = await bcrypt.genSalt(10);
         const pass = await bcrypt.hash(req.body.password, enc)
         console.log(pass);

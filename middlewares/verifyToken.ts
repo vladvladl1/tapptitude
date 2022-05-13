@@ -41,16 +41,7 @@ export const verificaToken = async (req: Request & {username:string}, res: Respo
         console.log("3");
         return res.sendStatus(401);
     }
-    try{
-        const user = await userService.findByUsername(decoded.username);
-        if(user.status === "suspended"){
-            const sess = await sessionService.findByUsername(user.username);
-            const something = await sessionService.deleteByUsername(sess.username);
-            return res.status(400).send({error:"user is suspended"});
-        }
-    }catch (err){
-        console.log(err);
-    }
+
     req.username = decoded.username;
     console.log(req.username);
     //res.status(200).send(decoded.username);
