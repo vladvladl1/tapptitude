@@ -7,7 +7,7 @@ export interface IRide extends Document {
     time: number,
     start: {type:string, coordinates: [number, number]},
     stop: {type:string, coordinates: [number, number]},
-    intermediary: {type:string, coordinates: [number, number]},
+    intermediary: {type:string, coordinates: [number, number][]},
     distance:number,
     dateOfStart: Date
 }

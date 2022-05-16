@@ -144,21 +144,25 @@ export const distance = async (req, res) => {
         if(coordinates[0]<-180 || coordinates[0]>180){
             return res.status(400).send({error:"invalid coordinates"});
         }
-        if(ride.intermediary.coordinates === [0,0] && ride.start.coordinates !== ride.intermediary.coordinates){
-            ride.intermediary.coordinates = ride.start.coordinates;
-        }else{
-            let dist = giveMeDistance(coordinates[0], ride.intermediary.coordinates[0], coordinates[1], ride.intermediary.coordinates[1]);
-            ride.intermediary.coordinates = coordinates;
+        let dist=0;
+        if(ride.intermediary.coordinates.length!==0){
+            dist = giveMeDistance(coordinates[0], ride.intermediary.coordinates[ride.start.coordinates.length-1][0], coordinates[1], ride.intermediary.coordinates[ride.start.coordinates.length-1][1]);
+        }else {
+            dist = giveMeDistance(coordinates[0], ride.start.coordinates[ride.start.coordinates.length-1][0], coordinates[1], ride.start.coordinates[ride.start.coordinates.length-1][1]);
+        }
+            dist = dist + ride.distance;
+            //ride.intermediary.coordinates.push(coordinates);
             console.log("rided inter "+ ride.intermediary.coordinates);
+            console.log("rided11 inter "+ ride.intermediary.coordinates[0]);
             console.log("inter" + coordinates[0]);
             console.log("distanta este "+ dist);
             const battery = scooter.battery;
             const actualDate = new Date();
             const time = parseInt(((actualDate.getTime() - ride.dateOfStart.getTime())/1000).toFixed(0));;
-            const distance  = ride.distance;
-            await rideService.updateOngoingRide(username, ride.intermediary.coordinates, dist);
-            res.status(200).send({dist});
-        }
+            const distance  = dist;
+            await rideService.updateOngoingRide(username, ride.intermediary.coordinates, distance);
+            res.status(200).send({battery, time, distance});
+
     }catch(err){
         console.log(err);
         res.status(400).send();

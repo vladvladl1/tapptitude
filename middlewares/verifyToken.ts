@@ -33,6 +33,7 @@ export const verificaToken = async (req: Request & {username:string}, res: Respo
         return res.sendStatus(401);
     }
 
+
     const decoded = jwt.decode(JSON.parse(token));
     console.log(decoded);
     console.log(decoded.username);
@@ -40,6 +41,16 @@ export const verificaToken = async (req: Request & {username:string}, res: Respo
     if (decoded === undefined || decoded.username === undefined) {
         console.log("3");
         return res.sendStatus(401);
+    }
+    try{
+        const user = await userService.findByUsername(decoded.username);
+        if(user.status === "suspended"){
+            req.headers.authorization = undefined;
+            res.status(401).send({error: "user suspended"});
+        }
+
+    }catch(err){
+        console.log(err);
     }
 
     req.username = decoded.username;

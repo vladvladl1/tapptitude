@@ -67,10 +67,10 @@ export const suspendUser = async (req, res) => {
             const something = await sessionService.deleteByUsername(sess.username);
             res.sendStatus(200);
         }else{
-            res.status(400).send({error:"no user found"});
+            res.status(401).send({error:"no user found"});
         }
     }catch(err){
-        res.sendStatus(400);
+        res.sendStatus(401);
         console.log(err);
     }
 }
