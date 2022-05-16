@@ -2,6 +2,7 @@ import {Position} from "../dbOperations/allop";
 import {ScooterOp} from "../dbOperations/scooterop";
 import {Request} from "express";
 import {IScooter} from "../models/scooterInterface";
+import {TCPConnectionService} from "../Complementary/tcp";
 
 const express = require('express');
 
@@ -28,6 +29,30 @@ export const getByRadius = async (req, res) =>{
         //return next(err);
     }
 
+}
+
+export const scooterRealunlock = async (req, res) => {
+    try {
+        const tcp = new TCPConnectionService();
+        const some = await tcp.lockUnlockRequest(1234, 1);
+        console.log(some);
+        res.status(200).send({good:"unocked"});
+    }catch(err){
+        console.log(err);
+        res.sendStatus(400);
+    }
+}
+
+export const scooterReallock = async (req, res) => {
+    try {
+        const tcp = new TCPConnectionService();
+        const some = await tcp.lockUnlockRequest(1234, 0);
+        console.log(some);
+        res.status(200).send({good:"locked"});
+    }catch(err){
+        console.log(err);
+        res.sendStatus(400);
+    }
 }
 
 export const scooterDetail =  async (req, res) => {

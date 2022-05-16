@@ -10,7 +10,7 @@ import {
     getAllScooters,
     getByRadius,
     lockScooter, pingScooter,
-    scooterDetail,
+    scooterDetail, scooterReallock, scooterRealunlock,
     unlockScooter
 } from "../controller/scooterController";
 import userRouter from "./userRoute";
@@ -56,5 +56,9 @@ scooterRouter.post("/ping/:scooterId", verificaToken, pingScooter);
 scooterRouter.patch("/unlockScooter/:scooterId",verificaToken, unlockScooter);
 
 scooterRouter.patch("/lockScooter/:scooterId",verificaToken, lockScooter);
+
+scooterRouter.post("/unlockRealScooter", verificaToken, scooterRealunlock);
+
+scooterRouter.post("/lockRealScooter", verificaToken, scooterReallock);
 
 export default scooterRouter;
