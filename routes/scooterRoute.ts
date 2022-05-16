@@ -46,7 +46,7 @@ scooterRouter.post("/deleteScooters", deleteScooters);
 
 scooterRouter.get("/getNearby", verificaToken, getByRadius);
 
-scooterRouter.post("/getAllScooters", verificaToken, getAllScooters);
+scooterRouter.post("/getAllScooters", getAllScooters);
 
 scooterRouter.get("/scooterDetail/:scooterId", verificaToken, scooterDetail);
 

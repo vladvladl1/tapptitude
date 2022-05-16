@@ -145,11 +145,11 @@ export const distance = async (req, res) => {
             return res.status(400).send({error:"invalid coordinates"});
         }
         let dist=0;
-        if(ride.intermediary.coordinates.length!==0){
+        if(ride.intermediary.coordinates.length!==1){
             dist = giveMeDistance(coordinates[0], ride.intermediary.coordinates[ride.intermediary.coordinates.length-1][0], coordinates[1], ride.intermediary.coordinates[ride.intermediary.coordinates.length-1][1]);
 
         }else {
-            dist = giveMeDistance(coordinates[0], ride.start.coordinates[ride.start.coordinates.length-1][0], coordinates[1], ride.start.coordinates[ride.start.coordinates.length-1][1]);
+            dist = giveMeDistance(coordinates[0], ride.start.coordinates[0], coordinates[1], ride.start.coordinates[1]);
         }
             dist = dist + ride.distance;
             //ride.intermediary.coordinates.push(coordinates);
