@@ -30,17 +30,12 @@ const rideSchema = new Schema({
             required: true,
             default: [0, 0]
         }},
-    intermediary: {type: {
-            type: String, // Don't do `{ location: { type: String } }`
-            enum: ['Point'],
-            required: false,
-            default: 'Point'
-        },
-        coordinates: {
+    intermediary:
+        {
             type: [[Number]],
             required: true,
-            default: [0, 0]
-        }},
+            default: [[0, 0]]
+        },
 
     distance: {type: Number, default: 0},
     dateOfStart: {type: Date}

@@ -8,6 +8,8 @@ import {ScooterOp} from "../dbOperations/scooterop";
 const rideService = new RideOp();
 const scooterService = new ScooterOp();
 
+
+
 export const startRide = async (req, res) => {
     const scooterId = req.params.scooterId;
     const userPos = req.body;
@@ -25,7 +27,8 @@ export const startRide = async (req, res) => {
             const start = userPos;
             const stop = userPos;
             const dateOfStart = new Date();
-            const obj = new Rides(username, scooterId, price, time, start, stop, dateOfStart);
+            let intermediary = [userPos.coordinates];
+            const obj = new Rides(username, scooterId, price, time, start, stop, dateOfStart, intermediary);
             console.log("obj user " + obj.username);
 
             const ride = rideService.createObject(<IRide>obj);
@@ -145,23 +148,26 @@ export const distance = async (req, res) => {
             return res.status(400).send({error:"invalid coordinates"});
         }
         let dist=0;
-        if(ride.intermediary.coordinates.length!==1){
-            dist = giveMeDistance(coordinates[0], ride.intermediary.coordinates[ride.intermediary.coordinates.length-1][0], coordinates[1], ride.intermediary.coordinates[ride.intermediary.coordinates.length-1][1]);
+       // if(ride.intermediary.length===1){
 
-        }else {
-            dist = giveMeDistance(coordinates[0], ride.start.coordinates[0], coordinates[1], ride.start.coordinates[1]);
-        }
+       //     dist = giveMeDistance(coordinates[0], ride.start.coordinates[0], coordinates[1], ride.start.coordinates[1]);
+       //     ride.intermediary[0] = coordinates;
+      //      console.log("ride intermediary in else:" + ride.intermediary);
+      //      console.log("lenght:" + ride.intermediary.length);
+
+     //   }else {
+
+            dist = giveMeDistance(coordinates[0], ride.intermediary[ride.intermediary.length - 1][0], coordinates[1], ride.intermediary[ride.intermediary.length - 1][1]);
+            console.log("ride aici ajunge:" + ride.intermediary);
+            ride.intermediary.push(coordinates);
+            console.log("ride intermediary:" + ride.intermediary);
+      //  }
             dist = dist + ride.distance;
-            //ride.intermediary.coordinates.push(coordinates);
-            console.log("rided inter "+ ride.intermediary.coordinates);
-            console.log("rided11 inter "+ ride.intermediary.coordinates[0]);
-            console.log("inter" + coordinates[0]);
-            console.log("distanta este "+ dist);
             const battery = scooter.battery;
             const actualDate = new Date();
             const time = parseInt(((actualDate.getTime() - ride.dateOfStart.getTime())/1000).toFixed(0));;
             const distance  = dist;
-            await rideService.updateOngoingRide(username, ride.intermediary.coordinates, distance);
+            await rideService.updateOngoingRide(username, ride.intermediary, distance);
             res.status(200).send({battery, time, distance});
 
     }catch(err){
