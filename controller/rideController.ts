@@ -146,7 +146,8 @@ export const distance = async (req, res) => {
         }
         let dist=0;
         if(ride.intermediary.coordinates.length!==0){
-            dist = giveMeDistance(coordinates[0], ride.intermediary.coordinates[ride.start.coordinates.length-1][0], coordinates[1], ride.intermediary.coordinates[ride.start.coordinates.length-1][1]);
+            dist = giveMeDistance(coordinates[0], ride.intermediary.coordinates[ride.intermediary.coordinates.length-1][0], coordinates[1], ride.intermediary.coordinates[ride.intermediary.coordinates.length-1][1]);
+
         }else {
             dist = giveMeDistance(coordinates[0], ride.start.coordinates[ride.start.coordinates.length-1][0], coordinates[1], ride.start.coordinates[ride.start.coordinates.length-1][1]);
         }
