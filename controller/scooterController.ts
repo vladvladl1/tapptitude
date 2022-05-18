@@ -36,15 +36,30 @@ export const scooterRealunlock = async (req, res) => {
     const scooterId = req.params.scooterId;
     console.log("pin " + pin);
     console.log("params" + scooterId);
-    try {
-        const tcp = new TCPConnectionService();
-        const some = await tcp.lockUnlockRequest(1234, 0);
-        await tcp.theUnlock(some);
-        console.log(some);
-        res.status(200).send({good:"unocked"});
-    }catch(err){
-        console.log(err);
-        res.sendStatus(400);
+    if(scooterId!=="real") {
+        try {
+            const scooter = await scooterService.findByScooterId(scooterId);
+            if (scooter.pin == pin) {
+                const update = await scooterService.updateLockedByName(scooterId, "locked");
+                return res.status(200).send({update});
+            } else {
+                res.status(220).send({error: "wrong pin"});
+            }
+        } catch (err) {
+            console.log(err);
+            res.sendStatus(220);
+        }
+    }else {
+        try {
+            const tcp = new TCPConnectionService();
+            const some = await tcp.lockUnlockRequest(1234, 0);
+            await tcp.theUnlock(some);
+            console.log(some);
+            res.status(200).send({good: "unocked"});
+        } catch (err) {
+            console.log(err);
+            res.sendStatus(400);
+        }
     }
 }
 
@@ -53,15 +68,30 @@ export const scooterReallock = async (req, res) => {
     const scooterId = req.params.scooterId;
     console.log("pin " + pin);
     console.log("params" + scooterId);
-    try {
-        const tcp = new TCPConnectionService();
-        const some = await tcp.lockUnlockRequest(1234, 1);
-        await tcp.theLock(some);
-        console.log(some);
-        res.status(200).send({good:"locked"});
-    }catch(err){
-        console.log(err);
-        res.sendStatus(400);
+    if(scooterId!=="real") {
+        try {
+            const scooter = await scooterService.findByScooterId(scooterId);
+            if (scooter.pin == pin) {
+                const update = await scooterService.updateLockedByName(scooterId, "locked");
+                return res.status(200).send({update});
+            } else {
+                res.status(220).send({error: "wrong pin"});
+            }
+        } catch (err) {
+            console.log(err);
+            res.sendStatus(220);
+        }
+    }else {
+        try {
+            const tcp = new TCPConnectionService();
+            const some = await tcp.lockUnlockRequest(1234, 1);
+            await tcp.theLock(some);
+            console.log(some);
+            res.status(200).send({good: "locked"});
+        } catch (err) {
+            console.log(err);
+            res.sendStatus(400);
+        }
     }
 }
 
