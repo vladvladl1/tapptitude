@@ -40,7 +40,7 @@ export const scooterRealunlock = async (req, res) => {
         try {
             const scooter = await scooterService.findByScooterId(scooterId);
             if (scooter.pin == pin) {
-                const update = await scooterService.updateLockedByName(scooterId, "locked");
+                const update = await scooterService.updateLockedByName(scooterId, "unlocked");
                 return res.status(200).send({update});
             } else {
                 res.status(220).send({error: "wrong pin"});
