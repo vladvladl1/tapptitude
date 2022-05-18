@@ -32,6 +32,10 @@ export const getByRadius = async (req, res) =>{
 }
 
 export const scooterRealunlock = async (req, res) => {
+    const  pin = req.body.pin;
+    const scooterId = req.params.scooterId;
+    console.log("pin " + pin);
+    console.log("params" + scooterId);
     try {
         const tcp = new TCPConnectionService();
         const some = await tcp.lockUnlockRequest(1234, 0);
@@ -45,6 +49,10 @@ export const scooterRealunlock = async (req, res) => {
 }
 
 export const scooterReallock = async (req, res) => {
+    const  pin = req.body.pin;
+    const scooterId = req.params.scooterId;
+    console.log("pin " + pin);
+    console.log("params" + scooterId);
     try {
         const tcp = new TCPConnectionService();
         const some = await tcp.lockUnlockRequest(1234, 1);

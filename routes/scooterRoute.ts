@@ -53,9 +53,9 @@ scooterRouter.get("/scooterDetail/:scooterId", verificaToken, scooterDetail);
 scooterRouter.post("/ping/:scooterId", verificaToken, pingScooter);
 
 
-scooterRouter.patch("/unlockScooter/:scooterId",verificaToken, unlockScooter);
+scooterRouter.patch("/unlockScooter/:scooterId",verificaToken, scooterRealunlock);
 
-scooterRouter.patch("/lockScooter/:scooterId",verificaToken, lockScooter);
+scooterRouter.patch("/lockScooter/:scooterId",verificaToken, scooterReallock);
 
 scooterRouter.post("/unlockRealScooter", verificaToken, scooterRealunlock);
 
