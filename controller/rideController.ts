@@ -75,8 +75,6 @@ export const stopRide = async (req, res, next) => {
             console.log(e);
             res.sendStatus(220);
         }
-
-
 }
 
 export const history = async (req, res) => {
