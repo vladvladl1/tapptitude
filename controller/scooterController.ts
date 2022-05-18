@@ -50,15 +50,19 @@ export const scooterRealunlock = async (req, res) => {
             res.sendStatus(220);
         }
     }else {
-        try {
-            const tcp = new TCPConnectionService();
-            const some = await tcp.lockUnlockRequest(1234, 0);
-            await tcp.theUnlock(some);
-            console.log(some);
-            res.status(200).send({good: "unocked"});
-        } catch (err) {
-            console.log(err);
-            res.sendStatus(400);
+        if(pin!==1234){
+            res.status(220).send({error: "wrong pin"});
+        }else {
+            try {
+                const tcp = new TCPConnectionService();
+                const some = await tcp.lockUnlockRequest(1234, 0);
+                await tcp.theUnlock(some);
+                console.log(some);
+                res.status(200).send({good: "unocked"});
+            } catch (err) {
+                console.log(err);
+                res.sendStatus(400);
+            }
         }
     }
 }
@@ -82,15 +86,19 @@ export const scooterReallock = async (req, res) => {
             res.sendStatus(220);
         }
     }else {
-        try {
-            const tcp = new TCPConnectionService();
-            const some = await tcp.lockUnlockRequest(1234, 1);
-            await tcp.theLock(some);
-            console.log(some);
-            res.status(200).send({good: "locked"});
-        } catch (err) {
-            console.log(err);
-            res.sendStatus(400);
+        if(pin!==1234){
+            res.status(220).send({error: "wrong pin"});
+        }else {
+            try {
+                const tcp = new TCPConnectionService();
+                const some = await tcp.lockUnlockRequest(1234, 1);
+                await tcp.theLock(some);
+                console.log(some);
+                res.status(200).send({good: "locked"});
+            } catch (err) {
+                console.log(err);
+                res.sendStatus(400);
+            }
         }
     }
 }
