@@ -8,4 +8,7 @@ export class SessionOp extends Allop<ISession> {
     constructor (){
         super(sessionModel);
     }
+    findByUsername( username:string ){
+        return sessionModel.findOne({"username": username}, {_id:0});
+    }
 }

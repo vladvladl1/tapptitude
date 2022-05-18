@@ -5,8 +5,33 @@ import {Allop} from "./allop";
 
 
 export class UserOp extends Allop<IUser> {
+
     constructor (){
         super(userModel);
+    }
+    updateUserStatus(username:string, status:string){
+        return userModel.updateOne({"username": username}, {$set: {"status":status}});
+    }
+    updateEmail(username: string, email: string){
+        return userModel.updateOne({"username": username}, {$set: {"email": email}});
+    }
+    updateUsername(username: string, newUsername: string){
+        return userModel.updateOne({"username":username}, {$set: {"username": newUsername}});
+    }
+    updateDlByUsername(username: string, drivingLicence:string){
+        return userModel.updateOne({"username": username}, {$set: {"drivingLicense":drivingLicence}});
+    }
+    updatePasswordByUsername (username: string, password: string){
+        return userModel.updateOne({"username": username}, {$set: {"password": password}});
+    }
+    findByUsername( username:string ){
+        return userModel.findOne({"username": username}, {_id:0});
+    }
+    findByEmail(email:string){
+        return userModel.findOne({"email": email}, {_id:0});
+    }
+    findAllByUsername(username: string){
+        return userModel.find({"username": username});
     }
 }
 

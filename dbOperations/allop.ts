@@ -1,4 +1,5 @@
 import mongoose, {Schema} from "mongoose";
+import rideModel from "../dataBase/ridedb";
 
 
 export type Position = {type:string, coordinates:[number]};
@@ -17,26 +18,8 @@ export class Allop<T> {
     findAll(){
         return this.model.find({});
     }
-    findAllByUsername(username: string){
-        return this.model.find({"username": username});
-    }
-    findByPin(pin: number){
-        return this.model.findOne({"pin": pin}, {_id:0});
-    }
 
-    findByEmail(email:string){
-       return this.model.findOne({"email": email}, {_id:0});
-    }
 
-    findByUsername( username:string ){
-        return this.model.findOne({"username": username}, {_id:0});
-    }
-    findByScooterId(scooterId: string){
-        return this.model.findOne({"scooterId": scooterId}, {_id:0});
-    }
-    findOngoingRideByUsername(username: string){
-        return this.model.findOne({"username": username, "time": 0});
-    }
     findBySortedDate(){
         return this.model.find().sort({date:1});
     }
@@ -44,20 +27,12 @@ export class Allop<T> {
         const Id = new mongoose.Types.ObjectId(id);
         return this.model.findOne({"_id":Id});
     }
-    findNearby(maxRange: number, position: Position){
-        return this.model.find({gpsCoordinates : {$near: {$geometry: position, $maxDistance: maxRange}}})
-    }
+
     findPaginated(page:number, username:string){
         return this.model.aggregate([{ '$match'    : { "username" : username }}, {$sort: {"dateOfStart": -1}},{$facet: {
                 metadata:  [{ $count: "total" }, { $addFields: { page: page/10 + 1}}] ,
                 data: [ { $skip: page }, { $limit: 10 } ]
             }}]);
-    }
-    findNumberOfDocumentsWithUsername(username:string){
-        return this.model.find({"username":username}).count();
-    }
-    findNearbyById(scooterId: string, position: Position, maxRange: number){
-        return this.model.find({"scooterId": scooterId, gpsCoordinates : {$near: {$geometry: position, $maxDistance: maxRange}}});
     }
     deleteByUsername (username: string){
         return this.model.deleteOne({"username": username});
@@ -65,32 +40,8 @@ export class Allop<T> {
     deleteAll(){
         return  this.model.deleteMany({});
     }
-    updatePasswordByUsername (username: string, password: string){
-        return this.model.updateOne({"username": username}, {$set: {"password": password}});
-    }
-    updateLockedByName (name: string, locked: string){
-        return this.model.updateOne({"scooterId": name}, {$set: {"lockedStatus": locked}});
-    }
-    updateLockedByPin (pin: number, locked: string){
-        return this.model.updateOne({"pin": pin}, {$set: {"lockedStatus": locked}});
-    }
-    updateEmail(username: string, email: string){
-        return this.model.updateOne({"username": username}, {$set: {"email": email}});
-    }
-    updateUsername(username: string, newUsername: string){
-        return this.model.updateOne({"username":username}, {$set: {"username": newUsername}});
-    }
-    updateDlByUsername(username: string, drivingLicence:string){
-        return this.model.updateOne({"username": username}, {$set: {"drivingLicense":drivingLicence}});
-    }
-    updateStopRide(username:string, price:number, time: number, stop: Position){
-        return this.model.updateOne({"username": username, "time": 0}, {$set: {"price": price, "time": time, "stop": stop}});
-    }
-    updateOngoingRide(username:string, intermediary: Position, distance:number){
-        return this.model.updateOne({"username": username, "time": 0}, {$set: {"intermediary":intermediary, distance:distance}});
-    }
-    updateUserStatus(username:string, status:string){
-        return this.model.updateOne({"username": username}, {$set: {"status":status}});
-    }
+
+
+
 
 }
