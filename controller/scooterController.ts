@@ -34,7 +34,8 @@ export const getByRadius = async (req, res) =>{
 export const scooterRealunlock = async (req, res) => {
     try {
         const tcp = new TCPConnectionService();
-        const some = await tcp.lockUnlockRequest(1234, 1);
+        const some = await tcp.lockUnlockRequest(1234, 0);
+        await tcp.theUnlock(some);
         console.log(some);
         res.status(200).send({good:"unocked"});
     }catch(err){
@@ -46,7 +47,8 @@ export const scooterRealunlock = async (req, res) => {
 export const scooterReallock = async (req, res) => {
     try {
         const tcp = new TCPConnectionService();
-        const some = await tcp.lockUnlockRequest(1234, 0);
+        const some = await tcp.lockUnlockRequest(1234, 1);
+        await tcp.theLock(some);
         console.log(some);
         res.status(200).send({good:"locked"});
     }catch(err){
