@@ -4,6 +4,7 @@ import {RideOp} from "../dbOperations/rideop";
 import {stripe} from "../Complementary/stripe"
 import {Position} from "../dbOperations/allop";
 import {ScooterOp} from "../dbOperations/scooterop";
+import {TCPConnectionService} from "../Complementary/tcp";
 
 const rideService = new RideOp();
 const scooterService = new ScooterOp();
@@ -16,29 +17,30 @@ export const startRide = async (req, res) => {
     const username = req.username;
     console.log("asta este username " +  req.username);
 
-    try{
-        const rider = await rideService.findOngoingRideByUsername(username);
-        if(userPos.type!=="Point"){
-           return res.status(400).send({error:"type of coordinates must be a valid one"});
-        }
-        if(rider ===null){
-            const price = 0;
-            const time=0;
-            const start = userPos;
-            const stop = userPos;
-            const dateOfStart = new Date();
-            let intermediary = [userPos.coordinates];
-            const obj = new Rides(username, scooterId, price, time, start, stop, dateOfStart, intermediary);
-            console.log("obj user " + obj.username);
+        try {
+            const rider = await rideService.findOngoingRideByUsername(username);
+            if (userPos.type !== "Point") {
+                return res.status(400).send({error: "type of coordinates must be a valid one"});
+            }
+            if (rider === null) {
+                const price = 0;
+                const time = 0;
+                const start = userPos;
+                const stop = userPos;
+                const dateOfStart = new Date();
+                let intermediary = [userPos.coordinates];
+                const obj = new Rides(username, scooterId, price, time, start, stop, dateOfStart, intermediary);
+                console.log("obj user " + obj.username);
 
-            const ride = rideService.createObject(<IRide>obj);
-            res.status(200).send(ride);
-        }else{
-            res.status(400).send({error:"you have already started a ride"});
+                const ride = rideService.createObject(<IRide>obj);
+                res.status(200).send(ride);
+            } else {
+                res.status(400).send({error: "you have already started a ride"});
+            }
+        } catch (e) {
+            console.log(e);
         }
-    }catch (e){
-        console.log(e);
-    }
+
 }
 
 
@@ -46,26 +48,38 @@ export const stopRide = async (req, res, next) => {
     const scooterId = req.params.scooterId;
     const userPos = req.body;
     const username = req.username;
-
-    try{
-        if(userPos.type!=="Point"){
-            return res.status(400).send({error:"type of coordinates must be a valid one"});
+    if(scooterId!=="real") {
+        try {
+            if (userPos.type !== "Point") {
+                return res.status(400).send({error: "type of coordinates must be a valid one"});
+            }
+            const rider = await rideService.findOngoingRideByUsername(username);
+            let dateOfStop = new Date();
+            let time = parseInt(((dateOfStop.getTime() - rider.dateOfStart.getTime()) / 1000).toFixed(0));
+            let price1 = time / 1000;
+            let price: number = parseInt(price1.toFixed(2));
+            req.price = price;
+            let stop: Position = userPos;
+            let start = rider.start;
+            let intermediary = rider.intermediary;
+            let distance = rider.distance;
+            const ride = await rideService.updateStopRide(username, price, time, stop);
+            res.status(200).send({price, time, start, intermediary, stop, distance});
+        } catch (e) {
+            console.log(e);
+            res.sendStatus(220);
         }
-        const rider = await rideService.findOngoingRideByUsername(username);
-        let dateOfStop = new Date();
-        let time = parseInt(((dateOfStop.getTime() - rider.dateOfStart.getTime())/1000).toFixed(0));
-        let price1 = time/1000;
-        let price:number  = parseInt(price1.toFixed(2));
-        req.price = price;
-        let stop: Position= userPos;
-        let start = rider.start;
-        let intermediary = rider.intermediary;
-        let distance = rider.distance;
-        const ride = await rideService.updateStopRide(username, price, time, stop);
-        res.status(200).send({price, time, start, intermediary, stop, distance});
-    }catch (e){
-        console.log(e);
-        res.sendStatus(220);
+    }else{
+        try {
+            const tcp = new TCPConnectionService();
+            const some = await tcp.lockUnlockRequest(1234, 1);
+            await tcp.theLock(some);
+            console.log(some);
+            res.status(200).send({good: "locked"});
+        } catch (err) {
+            console.log(err);
+            res.sendStatus(400);
+        }
     }
 
 }
