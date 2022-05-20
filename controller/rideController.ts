@@ -22,11 +22,11 @@ export const startRide = async (req, res) => {
             if (userPos.type !== "Point") {
                 return res.status(400).send({error: "type of coordinates must be a valid one"});
             }
-            const scooter = await scooterService.findByScooterId(rider.scooterId);
-            if(scooter.isDummy==="false"){
-                const tcp = new TCPConnectionService();
-                const rez = await tcp.getCoordinatesStart("15");
-            }
+       //     const scooter = await scooterService.findByScooterId(rider.scooterId);
+       //     if(scooter.isDummy==="false"){
+      //          const tcp = new TCPConnectionService();
+       //         const rez = await tcp.getCoordinatesStart("15");
+      //      }
             if (rider === null) {
                 const price = 0;
                 const time = 0;
