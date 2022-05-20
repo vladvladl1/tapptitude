@@ -8,8 +8,8 @@ import {
     createScooter,
     deleteScooters,
     getAllScooters,
-    getByRadius,
-    lockScooter, pingScooter,
+    getByRadius, getRealScooterInfo,
+    lockScooter, ping, pingScooter,
     scooterDetail, scooterReallock, scooterRealunlock,
     unlockScooter
 } from "../controller/scooterController";
@@ -42,6 +42,10 @@ scooterRouter.get("/", async (req, res) => {
 
 scooterRouter.post("/createScooter", createScooter);
 
+
+
+scooterRouter.get("/realScooterInfo", verificaToken, getRealScooterInfo);
+
 scooterRouter.post("/deleteScooters", deleteScooters);
 
 scooterRouter.post("/getNearby", verificaToken, getByRadius);
@@ -50,7 +54,7 @@ scooterRouter.post("/getAllScooters", getAllScooters);
 
 scooterRouter.get("/scooterDetail/:scooterId", verificaToken, scooterDetail);
 
-scooterRouter.post("/ping/:scooterId", verificaToken, pingScooter);
+scooterRouter.post("/ping/:scooterId", verificaToken, ping);
 
 
 scooterRouter.patch("/unlockScooter/:scooterId",verificaToken, scooterRealunlock);

@@ -21,4 +21,8 @@ export class ScooterOp extends Allop<IScooter> {
     findByScooterId(scooterId: string){
         return scooterModel.findOne({"scooterId": scooterId}, {_id:0});
     }
+    updateRealScooter(scooterId:string, charging: string, battery:number, lockState:string){
+        return scooterModel.updateOne({"scooterId":scooterId},{$set: {"battery":battery, "charging":charging, "lockedStatus":lockState}});
+    }
+
 }

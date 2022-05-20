@@ -5,11 +5,14 @@ import {IScooter} from "../models/scooterInterface";
 
 const scooterSchema = new Schema({
     scooterId: {type: String},
+    realScooterId:{type: String, default:"0"},
     battery: {type: Number},
     lockedStatus: {type: String},
     bookedStatus: {type: String},
     lastSeenDate: {type: Date},
     pin: {type: Number},
+    isDummy: {type: String, default:"true"},
+    charging: {type:String, default:"false"},
     gpsCoordinates: {
         type: {
             type: String, // Don't do `{ location: { type: String } }`

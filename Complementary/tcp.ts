@@ -1,5 +1,8 @@
 import { Socket } from "net";
 import {EventEmitter} from "events";
+import {ScooterOp} from "../dbOperations/scooterop";
+
+const scooterService = new ScooterOp();
 
  export class TCPConnectionService{
      client = new Socket();
@@ -40,14 +43,34 @@ import {EventEmitter} from "events";
                  break;
              case "L1":
                  const lockUnlock2 =    resp[5] + "," + resp[6] ;
-                 console.log("this is L0:" + lockUnlock2);
-                 this.eventEmitter.emit("L0", lockUnlock2);
+                 console.log("this is L1:" + lockUnlock2);
+                 this.eventEmitter.emit("L1", lockUnlock2);
                  //  console.log(data);
                  console.log(data.toString());
                  break;
+             case "H0":
+                 response = {scooterStatus: resp[4], voltage: resp[5], signal: resp[6], power: resp[7], chargingStatus: resp[8]};
+                 console.log(response);
+                 console.log("command of hearthbeat");
+                 this.eventEmitter.emit("H0",response);
+                 if(resp[2]!=="0"){
+                     scooterService.updateRealScooter(resp[2], resp[8],parseInt(resp[7]),resp[4]).then();
+                 }
+                 console.log(data.toString());
+                 break;
+             case "V0":
+                 this.eventEmitter.emit("V0", resp[4]);
+                 console.log(data.toString());
+                 break;
+
          }
      }
-     ping(){
+     async ping(data:string ){
+         const myString = "*SCOS,OM,867584033774352,V0,"+data+"#";
+         this.client.write(myString);
+         const result = await Promise.race([this.onEvent("V0"), this.onTimeout()]);
+         console.log(result);
+         return result;
      }
      async lockUnlockRequest(internalId: number, lock: number) {
          if (internalId === this.internalId) {
@@ -89,9 +112,16 @@ import {EventEmitter} from "events";
              myStringLock
          );
          console.log("my string " +myStringLock);
-         const result = await Promise.race( [this.onEvent("L0"), this.onTimeout()]);
+         const result = await Promise.race( [this.onEvent("L1"), this.onTimeout()]);
          console.log("this is the real lock result " + result);
          return result;
+     }
+
+     async hearthbeat(){
+
+         const result = await Promise.race([this.onEvent("H0"), this.onTimeout()]);
+        // return response
+
      }
 
      onEvent(eventName: string) {

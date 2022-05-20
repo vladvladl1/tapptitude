@@ -154,6 +154,19 @@ export const unlockScooter = async(req , res) => {
     }
 }
 
+export const getRealScooterInfo = async(req, res) => {
+    try{
+        const tcp = new TCPConnectionService();
+        const info =await tcp.hearthbeat();
+        console.log("this is the info:"+ info);
+        res.status(200).send({good:"good"});
+    }catch (err){
+        console.log(err);
+        res.status(400).send({error:"bad call for info"});
+    }
+
+}
+
 
 export const getAllScooters = async(req , res) => {
     try{
@@ -186,12 +199,45 @@ export const createScooter = async(req: Request<unknown, unknown, IScooter>, res
     }
 }
 
+export const ping = async(req, res) => {
+    const scooterId = req.params.scooterId;
+    const userPos:Position = req.body;
+    try{
+        const scooter = await scooterService.findNearbyById(scooterId, userPos, 100);
+        // @ts-ignore
+        if(scooter.isDummy==="false") {
+            const tcp = new TCPConnectionService();
+            const rez = await tcp.ping("1");
+            console.log(rez);
+            res.status(200).send({pinging: "true"});
+        }else{
+            const scooter = await scooterService.findNearbyById(scooterId, userPos, 100);
+
+            if(scooter===null){
+                res.status(400).send({error:"scooter is too far"});
+
+            }else{
+                res.status(200).send({scooter});
+
+            }
+        }
+    }catch(err){
+        console.log(err);
+        res.status(400).send({error:"error while pinging"});
+    }
+
+
+}
+
+
 export const pingScooter = async(req, res) => {
     const scooterId = req.params.scooterId;
     const userPos:Position = req.body;
 
     try{
+
         const scooter = await scooterService.findNearbyById(scooterId, userPos, 100);
+
         if(scooter===null){
             res.status(400).send({error:"scooter is too far"});
 
