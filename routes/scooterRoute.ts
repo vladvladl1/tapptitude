@@ -8,7 +8,7 @@ import {
     createScooter,
     deleteScooters,
     getAllScooters,
-    getByRadius, getRealScooterInfo,
+    getByRadius,
     lockScooter, ping, pingScooter,
     scooterDetail, scooterReallock, scooterRealunlock,
     unlockScooter
@@ -41,10 +41,6 @@ scooterRouter.get("/", async (req, res) => {
 
 
 scooterRouter.post("/createScooter", createScooter);
-
-
-
-scooterRouter.get("/realScooterInfo", verificaToken, getRealScooterInfo);
 
 scooterRouter.post("/deleteScooters", deleteScooters);
 

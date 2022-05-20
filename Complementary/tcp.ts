@@ -17,8 +17,9 @@ const scooterService = new ScooterOp();
          this.client.connect(5001,'ec2-18-156-36-228.eu-central-1.compute.amazonaws.com')
 
      }
-     private handleData(data: Buffer){
+     private async handleData(data: Buffer){
          const resp  = data.toString().split(",");
+
          const command = resp[3];
          let response: any;
 
@@ -45,26 +46,68 @@ const scooterService = new ScooterOp();
                  const lockUnlock2 =    resp[5] + "," + resp[6] ;
                  console.log("this is L1:" + lockUnlock2);
                  this.eventEmitter.emit("L1", lockUnlock2);
-                 //  console.log(data);
+                       //  console.log(data);
                  console.log(data.toString());
                  break;
              case "H0":
-                 response = {scooterStatus: resp[4], voltage: resp[5], signal: resp[6], power: resp[7], chargingStatus: resp[8]};
+                 response = {scooterIdReal:resp[2], scooterStatus: resp[4], voltage: resp[5], signal: resp[6], power: resp[7], chargingStatus: resp[8]};
                  console.log(response);
+                 let locStat: string;
                  console.log("command of hearthbeat");
-                 this.eventEmitter.emit("H0",response);
-                 if(resp[2]!=="0"){
-                     scooterService.updateRealScooter(resp[2], resp[8],parseInt(resp[7]),resp[4]).then();
+                 if(resp[4]==="0"){
+                     locStat = "unlocked";
+                 }else{
+                     locStat = "locked";
                  }
+                 let charg:string;
+                 if(resp[8]!=="0"){
+                     charg = "false";
+                 }else{
+                     charg = "true";
+                 }
+
+                 if(resp[2]!=="0"){
+                     console.log("a ajuns in try");
+                    try{
+                       const upda = await scooterService.updateRealScooter(resp[2], charg,parseInt(resp[7]),locStat);
+                        console.log(upda);
+                    }catch(err){console.log(err)};
+                 }
+                 this.eventEmitter.emit("H0",response)
                  console.log(data.toString());
                  break;
              case "V0":
                  this.eventEmitter.emit("V0", resp[4]);
                  console.log(data.toString());
                  break;
+             case "D1":
+                 this.eventEmitter.emit("D1", resp);
+                 break;
+             case "D0":
 
+                 break;
          }
      }
+
+     giveMeCoordinatesLat(lat:string, poz: string){
+
+     }
+     giveMeCoordinatesLong(long:string, poz:string){
+
+     }
+
+     giveMeDistance1(lat1: number, lat2:number, long1:number, long2: number){
+         //const earthRadius:number = 6378.1370;
+         let p = 0.017453292519943295;    // Math.PI / 180
+         let c = Math.cos;
+         let a = 0.5 - c((lat2 - lat1) * p)/2 +
+             c(lat1 * p) * c(lat2 * p) *
+             (1 - c((long2 - long1) * p))/2;
+         let c1 = 12742 * Math.asin(Math.sqrt(a));
+         console.log(c1);
+         return c1; // 2 * R; R = 6371 km
+     }
+
      async ping(data:string ){
          const myString = "*SCOS,OM,867584033774352,V0,"+data+"#";
          this.client.write(myString);
@@ -72,6 +115,8 @@ const scooterService = new ScooterOp();
          console.log(result);
          return result;
      }
+
+
      async lockUnlockRequest(internalId: number, lock: number) {
          if (internalId === this.internalId) {
              console.log("Lock/Unlock req. sent!");
@@ -123,6 +168,27 @@ const scooterService = new ScooterOp();
         // return response
 
      }
+
+     async getCoordinatesStart(time:string){
+         const myString = "*SCOS,OM,867584033774352,D1," + time+"#";
+         this.client.write(
+             myString
+         );
+         const result = await Promise.race( [this.onEvent("L1"), this.onTimeout()]);
+         console.log("this is the real lock result " + result);
+         return result;
+     }
+
+     async getCoordinatesStop(time:string){
+         const myString = "*SCOS,OM,867584033774352,D1,0#";
+         this.client.write(
+             myString
+         );
+         const result = await Promise.race( [this.onEvent("L1"), this.onTimeout()]);
+         console.log("this is the real lock result " + result);
+         return result;
+     }
+
 
      onEvent(eventName: string) {
          return new Promise((resolve, reject) => {
