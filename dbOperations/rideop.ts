@@ -17,7 +17,7 @@ export class RideOp extends Allop<IRide> {
         return rideModel.findOne({"username": username, "time": 0});
     }
     updateIntermediaryOngoingRideByScooterId(scooterId: string, intermediary: [number, number][], distance){
-        return rideModel.updateOne({"scooterId":scooterId}, {$set:{"intermediary":intermediary, "distance":distance}});
+        return rideModel.updateOne({"realScooterId":scooterId}, {$set:{"intermediary":intermediary, "distance":distance}});
     }
     findByUsername( username:string ){
         return rideModel.findOne({"username": username}, {_id:0});
@@ -27,5 +27,8 @@ export class RideOp extends Allop<IRide> {
     }
     updateOngoingRide(username:string, intermediary: [number, number][], distance:number){
         return rideModel.updateOne({"username": username, "time": 0}, {$set: {"intermediary":intermediary, distance:distance}});
+    }
+    findOngoingByScooterId(scooterId: string){
+        return rideModel.findOne({"realScooterId":scooterId});
     }
 }

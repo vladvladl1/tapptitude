@@ -1,9 +1,10 @@
 import { Socket } from "net";
 import {EventEmitter} from "events";
 import {ScooterOp} from "../dbOperations/scooterop";
+import {RideOp} from "../dbOperations/rideop";
 
 const scooterService = new ScooterOp();
-
+const rideService = new RideOp();
  export class TCPConnectionService{
      client = new Socket();
      internalId: number = 1234;
@@ -84,16 +85,69 @@ const scooterService = new ScooterOp();
                  this.eventEmitter.emit("D1", resp);
                  break;
              case "D0":
-
+                 try{
+                     const scooter = await rideService.findOngoingByScooterId(resp[2]);
+                     const lat = this.giveMeCoordinatesLat(resp[7], resp[8]);
+                     const long = this.giveMeCoordinatesLong(resp[9], resp[10]);
+                     const last = scooter.intermediary[scooter.intermediary.length];
+                     const inter:[number, number] = [lat, long];
+                     scooter.intermediary.push(inter);
+                     const distance = this.giveMeDistance1(last[0], inter[0], lat[1], inter[1]);
+                     await rideService.updateIntermediaryOngoingRideByScooterId(resp[2],scooter.intermediary,distance);
+                 }catch (err){
+                     console.log(err);
+                 }
                  break;
          }
      }
 
      giveMeCoordinatesLat(lat:string, poz: string){
+         let distance;
+         let dd;
+         dd[0] = lat[0];
+         dd[1] = lat[1];
+         let hour = parseInt(dd);
+         let mm;
+         mm[0] = lat[2];
+         mm[1] = lat[3];
+         mm[2] = lat[4];
+         mm[3]=lat[5];
+         mm[4]=lat[6];
+         mm[5]=lat[7];
+         mm[6]=lat[8];
+         let min = parseFloat(mm);
 
+        if(poz==="N"){
+            distance = hour +min/60;
+        }else{
+            distance = -(hour + min);
+        }
+        return distance;
      }
      giveMeCoordinatesLong(long:string, poz:string){
+         let distance;
+         let dd;
+         dd[0] = long[0];
+         dd[1] = long[1];
+         dd[2] = long[2];
+         let hour = parseInt(dd);
+         let mm;
+         mm[0] = long[3];
+         mm[1] = long[4];
+         mm[2] = long[5];
+         mm[3]=long[6];
+         mm[4]=long[7];
+         mm[5]=long[8];
+         mm[6]=long[9];
+         mm[7]=long[10];
+         let min = parseFloat(mm);
 
+         if(poz==="E"){
+             distance = hour +min/60;
+         }else{
+             distance = -(hour + min);
+         }
+         return distance;
      }
 
      giveMeDistance1(lat1: number, lat2:number, long1:number, long2: number){
