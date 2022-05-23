@@ -18,6 +18,9 @@ export class ScooterOp extends Allop<IScooter> {
     findNearby(maxRange: number, position: Position){
         return scooterModel.find({gpsCoordinates : {$near: {$geometry: position, $maxDistance: maxRange}}})
     }
+    findScooterIdByReal(scooterId:string){
+        return scooterModel.findOne({"realScooterId":scooterId});
+    }
 
     findByScooterId(scooterId: string){
         return scooterModel.findOne({"scooterId": scooterId}, {_id:0});

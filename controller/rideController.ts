@@ -59,11 +59,11 @@ export const stopRide = async (req, res, next) => {
             }
             if(scooterId==="real") {
                 const tcp = new TCPConnectionService();
-                const some = await tcp.lockUnlockRequest(1234, 1);
+                const some = await tcp.lockUnlockRequest(4352, 1);
                 await tcp.theLock(some);
                 console.log(some);
             }
-            await scooterService.updateLockedByName(scooterId, "locked");
+             await scooterService.updateLockedByName(scooterId, "locked");
 
             const rider = await rideService.findOngoingRideByUsername(username);
             let dateOfStop = new Date();

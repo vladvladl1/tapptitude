@@ -50,20 +50,44 @@ export const scooterRealunlock = async (req, res) => {
             res.sendStatus(220);
         }
     }else {
-        if(pin!==1234){
+        if(pin!==4352){
             res.status(220).send({error: "wrong pin"});
         }else {
             try {
                 const tcp = new TCPConnectionService();
-                const some = await tcp.lockUnlockRequest(1234, 0);
+                const some = await tcp.lockUnlockRequest(4352, 0);
                 await tcp.theUnlock(some);
                 console.log(some);
-                res.status(200).send({good: "unocked"});
+                res.status(200).send({good: "unlocked"});
             } catch (err) {
                 console.log(err);
                 res.sendStatus(400);
             }
         }
+    }
+}
+
+export const getActualPos = async (req, res) => {
+    try{
+        const tcp = new TCPConnectionService();
+        const some = await tcp.getCoordinatesStart("15");
+        console.log(some);
+        res.status(200).send({some});
+    }catch(err){
+        console.log(err);
+        res.status(400).send({error:"error getting pos"});
+    }
+}
+
+export const stopActualPos = async (req, res) => {
+    try{
+        const tcp = new TCPConnectionService();
+        const some = await tcp.getCoordinatesStop();
+        console.log(some);
+        res.status(200).send({some});
+    }catch(err){
+        console.log(err);
+        res.status(400).send({error:"error getting pos"});
     }
 }
 
@@ -86,12 +110,12 @@ export const scooterReallock = async (req, res) => {
             res.sendStatus(220);
         }
     }else {
-        if(pin!==1234){
+        if(pin!==4352){
             res.status(220).send({error: "wrong pin"});
         }else {
             try {
                 const tcp = new TCPConnectionService();
-                const some = await tcp.lockUnlockRequest(1234, 1);
+                const some = await tcp.lockUnlockRequest(4352, 1);
                 await tcp.theLock(some);
                 console.log(some);
                 res.status(200).send({good: "locked"});

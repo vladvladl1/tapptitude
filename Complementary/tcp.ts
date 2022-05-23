@@ -7,7 +7,7 @@ const scooterService = new ScooterOp();
 const rideService = new RideOp();
  export class TCPConnectionService{
      client = new Socket();
-     internalId: number = 1234;
+     internalId: number = 4352;
      private eventEmitter = new EventEmitter();
      constructor(){
          console.log("***")
@@ -86,14 +86,23 @@ const rideService = new RideOp();
                  break;
              case "D0":
                  try{
-                     const scooter = await rideService.findOngoingByScooterId(resp[2]);
-                     const lat = this.giveMeCoordinatesLat(resp[7], resp[8]);
-                     const long = this.giveMeCoordinatesLong(resp[9], resp[10]);
-                     const last = scooter.intermediary[scooter.intermediary.length];
-                     const inter:[number, number] = [lat, long];
-                     scooter.intermediary.push(inter);
-                     const distance = this.giveMeDistance1(last[0], inter[0], lat[1], inter[1]);
-                     await rideService.updateIntermediaryOngoingRideByScooterId(resp[2],scooter.intermediary,distance);
+                     console.log("the resp " +resp);
+                     if(resp.length>65) {
+                         console.log("aici a ajuns");
+                         const realScooter = await scooterService.findScooterIdByReal(resp[2]);
+                         console.log("scooterId " + realScooter.scooterId);
+                         const scooter = await rideService.findOngoingByScooterId(realScooter.scooterId);
+                         const lat = this.giveMeCoordinatesLat(resp[7], resp[8]);
+                         const long = this.giveMeCoordinatesLong(resp[9], resp[10]);
+                         console.log("lat and long " + lat + long);
+                         const last = scooter.intermediary[scooter.intermediary.length - 1];
+                         const inter: [number, number] = [lat, long];
+                         scooter.intermediary.push(inter);
+                         const distance = this.giveMeDistance1(last[0], inter[0], last[1], inter[1]);
+                         console.log("distata este de " + distance);
+                         console.log("coordonatele sunt:" + inter);
+                         await rideService.updateIntermediaryOngoingRideByScooterId(resp[2], scooter.intermediary, distance);
+                     }
                  }catch (err){
                      console.log(err);
                  }
@@ -101,20 +110,16 @@ const rideService = new RideOp();
          }
      }
 
-     giveMeCoordinatesLat(lat:string, poz: string){
+      giveMeCoordinatesLat(lat:string, poz: string){
          let distance;
-         let dd;
-         dd[0] = lat[0];
-         dd[1] = lat[1];
+         let dd:string;
+          console.log("lat" + lat);
+          console.log("poz"+poz);
+          dd = lat.substring(0,2)
          let hour = parseInt(dd);
-         let mm;
-         mm[0] = lat[2];
-         mm[1] = lat[3];
-         mm[2] = lat[4];
-         mm[3]=lat[5];
-         mm[4]=lat[6];
-         mm[5]=lat[7];
-         mm[6]=lat[8];
+         let mm:string;
+         mm = lat.substring(2, 9);
+
          let min = parseFloat(mm);
 
         if(poz==="N"){
@@ -124,22 +129,16 @@ const rideService = new RideOp();
         }
         return distance;
      }
-     giveMeCoordinatesLong(long:string, poz:string){
+      giveMeCoordinatesLong(long:string, poz:string){
          let distance;
-         let dd;
-         dd[0] = long[0];
-         dd[1] = long[1];
-         dd[2] = long[2];
+         let dd:string;
+         console.log("long" + long);
+         console.log("poz"+poz);
+         dd = long.substring(0,3);
          let hour = parseInt(dd);
-         let mm;
-         mm[0] = long[3];
-         mm[1] = long[4];
-         mm[2] = long[5];
-         mm[3]=long[6];
-         mm[4]=long[7];
-         mm[5]=long[8];
-         mm[6]=long[9];
-         mm[7]=long[10];
+         let mm:string;
+         mm = long.substring(3, 11);
+
          let min = parseFloat(mm);
 
          if(poz==="E"){
@@ -150,8 +149,9 @@ const rideService = new RideOp();
          return distance;
      }
 
-     giveMeDistance1(lat1: number, lat2:number, long1:number, long2: number){
-         //const earthRadius:number = 6378.1370;
+      giveMeDistance1(lat1: number, lat2:number, long1:number, long2: number){
+         console.log("lat1, lat2, long1, long2" + lat1 + lat2 + long1+long2);
+
          let p = 0.017453292519943295;    // Math.PI / 180
          let c = Math.cos;
          let a = 0.5 - c((lat2 - lat1) * p)/2 +
@@ -228,17 +228,17 @@ const rideService = new RideOp();
          this.client.write(
              myString
          );
-         const result = await Promise.race( [this.onEvent("L1"), this.onTimeout()]);
+         const result = await Promise.race( [this.onEvent("D1"), this.onTimeout()]);
          console.log("this is the real lock result " + result);
          return result;
      }
 
-     async getCoordinatesStop(time:string){
+     async getCoordinatesStop(){
          const myString = "*SCOS,OM,867584033774352,D1,0#";
          this.client.write(
              myString
          );
-         const result = await Promise.race( [this.onEvent("L1"), this.onTimeout()]);
+         const result = await Promise.race( [this.onEvent("D1"), this.onTimeout()]);
          console.log("this is the real lock result " + result);
          return result;
      }

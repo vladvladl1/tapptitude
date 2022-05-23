@@ -6,11 +6,11 @@ import {IScooter} from "../models/scooterInterface";
 import adminRouter from "./adminRouter";
 import {
     createScooter,
-    deleteScooters,
+    deleteScooters, getActualPos,
     getAllScooters,
     getByRadius,
     lockScooter, ping, pingScooter,
-    scooterDetail, scooterReallock, scooterRealunlock,
+    scooterDetail, scooterReallock, scooterRealunlock, stopActualPos,
     unlockScooter
 } from "../controller/scooterController";
 import userRouter from "./userRoute";
@@ -45,6 +45,10 @@ scooterRouter.post("/createScooter", createScooter);
 scooterRouter.post("/deleteScooters", deleteScooters);
 
 scooterRouter.post("/getNearby", verificaToken, getByRadius);
+
+scooterRouter.get("/getactual", verificaToken, getActualPos);
+
+scooterRouter.post("/stopactual", verificaToken, stopActualPos);
 
 scooterRouter.post("/getAllScooters", getAllScooters);
 
