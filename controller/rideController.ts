@@ -16,16 +16,16 @@ export const startRide = async (req, res) => {
     const userPos = req.body;
     const username = req.username;
     console.log("asta este username " +  req.username);
+    console.log("asta eeste scooter " +  scooterId);
 
         try {
             const rider = await rideService.findOngoingRideByUsername(username);
             if (userPos.type !== "Point") {
                 return res.status(400).send({error: "type of coordinates must be a valid one"});
             }
-           const scooter = await scooterService.findByScooterId(rider.scooterId);
-            await scooterService.updateLockedByName(scooterId, "unlocked");
-       //         const rez = await tcp.getCoordinatesStart("15");
-      //      }
+
+
+
             if (rider === null) {
                 const price = 0;
                 const time = 0;
@@ -35,7 +35,7 @@ export const startRide = async (req, res) => {
                 let intermediary = [userPos.coordinates];
                 const obj = new Rides(username, scooterId, price, time, start, stop, dateOfStart, intermediary);
                 console.log("obj user " + obj.username);
-
+                await scooterService.updateLockedByName(scooterId, "unlocked");
                 const ride = rideService.createObject(<IRide>obj);
                 res.status(200).send(ride);
             } else {
