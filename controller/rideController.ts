@@ -22,9 +22,8 @@ export const startRide = async (req, res) => {
             if (userPos.type !== "Point") {
                 return res.status(400).send({error: "type of coordinates must be a valid one"});
             }
-       //     const scooter = await scooterService.findByScooterId(rider.scooterId);
-       //     if(scooter.isDummy==="false"){
-      //          const tcp = new TCPConnectionService();
+           const scooter = await scooterService.findByScooterId(rider.scooterId);
+            await scooterService.updateLockedByName(scooterId, "unlocked");
        //         const rez = await tcp.getCoordinatesStart("15");
       //      }
             if (rider === null) {
@@ -64,6 +63,8 @@ export const stopRide = async (req, res, next) => {
                 await tcp.theLock(some);
                 console.log(some);
             }
+            await scooterService.updateLockedByName(scooterId, "locked");
+
             const rider = await rideService.findOngoingRideByUsername(username);
             let dateOfStop = new Date();
             let time = parseInt(((dateOfStop.getTime() - rider.dateOfStart.getTime()) / 1000).toFixed(0));
