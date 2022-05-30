@@ -16,7 +16,7 @@ export class ScooterOp extends Allop<IScooter> {
         return scooterModel.findOne({"scooterId": scooterId, gpsCoordinates : {$near: {$geometry: position, $maxDistance: maxRange}}});
     }
     findNearby(maxRange: number, position: Position){
-        return scooterModel.find({gpsCoordinates : {$near: {$geometry: position, $maxDistance: maxRange}}})
+        return scooterModel.find({gpsCoordinates : {$near: {$geometry: position, $maxDistance: maxRange}}, bookedStatus:"unbooked"});
     }
     findScooterIdByReal(scooterId:string){
         return scooterModel.findOne({"realScooterId":scooterId});
@@ -27,6 +27,9 @@ export class ScooterOp extends Allop<IScooter> {
     }
     updateRealScooter(scooterId:string, charging: string, battery:number, lockState:string){
         return scooterModel.updateOne({"realScooterId":scooterId},{$set: {"battery":battery, "charging":charging, "lockedStatus":lockState}});
+    }
+    updateBookedById(scooterId:string, status){
+        return scooterModel.updateOne({"scooterId":scooterId},{$set:{"bookedStatus":status}});
     }
 
 }

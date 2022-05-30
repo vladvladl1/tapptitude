@@ -28,7 +28,7 @@ export class UserOp extends Allop<IUser> {
         return userModel.findOne({"username": username}, {_id:0});
     }
     findByEmail(email:string){
-        return userModel.findOne({"email": email}, {_id:0});
+        return userModel.findOne({"email": email});
     }
     findAllByUsername(username: string){
         return userModel.find({"username": username});

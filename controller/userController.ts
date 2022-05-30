@@ -12,7 +12,7 @@ export const getMe = async(req, res ) => {
     const username = req.username;
     console.log(req.username);
     try{
-        const person= await userService.findByUsername(username);
+        const person= await userService.findById(req._id);
         if(person!==undefined){
             res.status(200).send(person);
         }else{
@@ -41,7 +41,7 @@ export const changePassword = async (req, res) => {
     }
     try{
 
-        const person = await userService.findByUsername(username);
+        const person = await userService.findById(req._id);
         if( username===undefined || oldPass===undefined || newPass===undefined){
             res.status(220).send({error: "wrong data"});
         }
@@ -72,7 +72,7 @@ export const changePassword = async (req, res) => {
 }
 
 export const getdl = async (req, res) => {
-    const person = await userService.findByUsername(req.username);
+    const person = await userService.findById(req._id);
     const path = person.drivingLicense;
     const s3 = new ResourceService();
     const url =  s3.getFileUrl(path);
@@ -158,17 +158,18 @@ export const modifyUsername = async(req, res) =>{
 
 export const modifyBoth = async( req, res) => {
     const username = req.username;
+    const id = req._id;
     const newUsername = req.body.username;
     const email = req.body.email;
     try{
-        const existingUsername = await userService.findByUsername(newUsername);
+        const existingUsername = await userService.findById(newUsername);
         const existingEmail = await userService.findByEmail(email);
         if(existingEmail!==null || existingUsername!==null){
             res.status(400).send({error:"wrong username"});
         }else{
-            const deleted = await sessionService.deleteByUsername(req.username);
-            const user = await userService.updateEmail(username, email);
-            const user1 = await userService.updateUsername(username, newUsername);
+            await sessionService.deleteByUsername(req.username);
+            await userService.updateEmail(username, email);
+            await userService.updateUsername(username, newUsername);
             const token =jwt.sign({username: newUsername}, process.env.jwtsecret);
             const sess =<ISession>{username: newUsername, token: token};
             const session = await sessionService.createObject(sess);

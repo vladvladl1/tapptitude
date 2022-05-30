@@ -8,7 +8,7 @@ require("dotenv").config({path:"../.env"});
 const userService = new UserOp();
 const sessionService = new SessionOp();
 
-export const verificaToken = async (req: Request & {username:string}, res: Response, next: NextFunction) => {
+export const verificaToken = async (req: Request & {username:string, _id:string}, res: Response, next: NextFunction) => {
 
     if (req.headers === undefined || req.headers.authorization === undefined) {
         console.log("0");
@@ -37,7 +37,7 @@ export const verificaToken = async (req: Request & {username:string}, res: Respo
     const decoded = jwt.decode(JSON.parse(token));
     console.log(decoded);
     console.log(decoded.username);
-
+    console.log("the magic id:" +decoded._id);
     if (decoded === undefined || decoded.username === undefined) {
         console.log("3");
         return res.sendStatus(401);
@@ -54,6 +54,7 @@ export const verificaToken = async (req: Request & {username:string}, res: Respo
     }
 
     req.username = decoded.username;
+    req._id = decoded._id;
     console.log(req.username);
     //res.status(200).send(decoded.username);
     return next();

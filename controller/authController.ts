@@ -34,7 +34,7 @@ export const login = async (req, res) => {
 
         const session = await sessionService.findByUsername(user.username);
         if (session) {
-            const deleted = await sessionService.deleteByUsername(user.username);
+            await sessionService.deleteByUsername(user.username);
         }
 
         if (user===undefined) {
@@ -49,7 +49,7 @@ export const login = async (req, res) => {
             }
             if (resp) {
 
-                const token = jwt.sign({username: user.username}, process.env.jwtsecret);
+                const token = jwt.sign({username: user.username, _id:user._id}, process.env.jwtsecret);
                 const sess = <ISession>{username: user.username, token: token};
                 const session = await sessionService.createObject(sess);
                 console.log("session username:" + session.username);
@@ -86,9 +86,10 @@ export const register = async (req: Request<unknown, unknown, IUser>, res) => {
         else{
             const enc = await bcrypt.genSalt(10);
             const pass = await bcrypt.hash(thepass, enc);
-            const token = jwt.sign({ username : body.username}, process.env.jwtsecret);
             body.password = pass;
             const user = await userService.createObject(body);
+            const created = await userService.findByEmail(body.email);
+            const token = jwt.sign({ username : body.username, _id:created._id}, process.env.jwtsecret);
             const sess = <ISession>{username: user.username, token: token};
             const session = await sessionService.createObject(sess);
             return res.status(200).send({user, token});

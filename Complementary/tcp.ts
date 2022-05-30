@@ -82,6 +82,7 @@ const rideService = new RideOp();
                  console.log(data.toString());
                  break;
              case "D1":
+                 console.log("this is d1 here is stops");
                  this.eventEmitter.emit("D1", resp);
                  break;
              case "D0":
@@ -102,6 +103,7 @@ const rideService = new RideOp();
                          console.log("distata este de " + distance);
                          console.log("coordonatele sunt:" + inter);
                          await rideService.updateIntermediaryOngoingRideByScooterId(resp[2], scooter.intermediary, distance);
+                         this.eventEmitter.emit("D0", resp);
                      }
                  }catch (err){
                      console.log(err);
