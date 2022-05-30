@@ -43,8 +43,7 @@ export const startRide = async (req, res) => {
                 const scooter = await scooterService.findByScooterId(scooterId);
                 if(scooter.isDummy==="false"){
                     const tcp = new TCPConnectionService();
-                    const some = await tcp.lockUnlockRequest(4352, 0);
-                    await tcp.theUnlock(some);
+
                     const some1 = await tcp.getCoordinatesStart("15");
                 }
                 res.status(200).send({booking:"booked"});
