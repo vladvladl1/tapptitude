@@ -178,7 +178,7 @@ export const modifyBoth = async( req, res) => {
             await userService.updateEmail(username, email);
             await userService.updateUsername(username, newUsername);
 
-                res.status(200).send({error:"could not create new session"});
+                res.status(200).send({error:"username modified"});
 
         }
     }catch(err){
