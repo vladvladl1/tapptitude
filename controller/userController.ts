@@ -174,17 +174,12 @@ export const modifyBoth = async( req, res) => {
         if(existingEmail!==null || existingUsername!==null){
             res.status(400).send({error:"wrong username"});
         }else{
-            await sessionService.deleteByUsername(req.username);
+            await sessionService.updateUsername(req.username, newUsername);
             await userService.updateEmail(username, email);
             await userService.updateUsername(username, newUsername);
-            const token =jwt.sign({username: newUsername}, process.env.jwtsecret);
-            const sess =<ISession>{username: newUsername, token: token};
-            const session = await sessionService.createObject(sess);
-            if(session!=null){
-                res.status(200).send({token});
-            }else{
-                res.status(400).send({error:"could not create new session"});
-            }
+
+                res.status(200).send({error:"could not create new session"});
+
         }
     }catch(err){
         console.log(err);
