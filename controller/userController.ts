@@ -44,27 +44,28 @@ export const changePassword = async (req, res) => {
         const person = await userService.findById(req._id);
         if( username===undefined || oldPass===undefined || newPass===undefined){
             res.status(220).send({error: "wrong data"});
-        }
-        if(person!==undefined){
-            bcrypt.compare(oldPass, person.password, async (err, resp) => {
-                if (err) {
-                    console.log("err m");
-                    res.status(220).send({error: "wrong passsword"});
-                }
-                if (resp) {
-                    console.log("resp m");
-                    const enc = await bcrypt.genSalt(10);
-                    const pass = await bcrypt.hash(newPass, enc);
-                    const uperson = await userService.updatePasswordByUsername(person.username, pass);
-                    res.status(200).send(uperson);
-                }
-                res.status(220).send({error: "wrong password"});
-            });
-        }else{
-            console.log("ajunge aici");
-            res.status(220).send({error: "wrong data"});
+        }else {
+            if (person !== undefined) {
+                bcrypt.compare(oldPass, person.password, async (err, resp) => {
+                    if (err) {
+                        console.log("err m");
+                        res.status(220).send({error: "wrong passsword"});
+                    }
+                    if (resp) {
+                        console.log("resp m");
+                        const enc = await bcrypt.genSalt(10);
+                        const pass = await bcrypt.hash(newPass, enc);
+                        const uperson = await userService.updatePasswordByUsername(person.username, pass);
+                        res.status(200).send(uperson);
+                    }
+                    res.status(220).send({error: "wrong password"});
+                });
+            } else {
+                console.log("ajunge aici");
+                res.status(220).send({error: "wrong data"});
 
 
+            }
         }
     }catch(err){
         console.log("aici la err");
