@@ -127,7 +127,7 @@ const rideService = new RideOp();
         if(poz==="N"){
             distance = hour +min/60;
         }else{
-            distance = -(hour + min);
+            distance = -(hour + min/60);
         }
         return distance;
      }
@@ -146,7 +146,7 @@ const rideService = new RideOp();
          if(poz==="E"){
              distance = hour +min/60;
          }else{
-             distance = -(hour + min);
+             distance = -(hour + min/60);
          }
          return distance;
      }
