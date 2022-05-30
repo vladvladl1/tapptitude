@@ -169,9 +169,9 @@ export const modifyBoth = async( req, res) => {
     const newUsername = req.body.username;
     const email = req.body.email;
     try{
-        const existingUsername = await userService.findById(newUsername);
-        const existingEmail = await userService.findByEmail(email);
-        if(existingEmail!==null || existingUsername!==null){
+        const existingUser = await userService.findById(id);
+
+        if(existingUser.username!==null){
             res.status(400).send({error:"wrong username"});
         }else{
             await sessionService.updateUsername(req.username, newUsername);
