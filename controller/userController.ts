@@ -172,7 +172,7 @@ export const modifyBoth = async( req, res) => {
         const existingUser = await userService.findById(id);
 
 
-        if(existingUser.username===null){
+        if(existingUser===null){
             res.status(400).send({error:"wrong username"});
         }else{
             const actual = existingUser.username;
