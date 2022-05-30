@@ -177,8 +177,7 @@ export const modifyBoth = async( req, res) => {
         }else{
             const actual = existingUser.username;
             await sessionService.updateUsername(actual, newUsername);
-            await userService.updateEmail(actual, email);
-            await userService.updateUsername(actual, newUsername);
+            await userService.updateBoth(actual, newUsername, email);
 
                 res.status(200).send({error:"username modified"});
 

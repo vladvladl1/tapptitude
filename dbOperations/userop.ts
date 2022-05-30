@@ -24,6 +24,9 @@ export class UserOp extends Allop<IUser> {
     updatePasswordByUsername (username: string, password: string){
         return userModel.updateOne({"username": username}, {$set: {"password": password}});
     }
+    updateBoth(username: string, newUsername: string, email: string){
+        return userModel.updateOne({"username":username}, {$set: {"username": newUsername, "email":email}});
+    }
     findByUsername( username:string ){
         return userModel.findOne({"username": username}, {_id:0});
     }
