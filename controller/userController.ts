@@ -56,9 +56,10 @@ export const changePassword = async (req, res) => {
                         const enc = await bcrypt.genSalt(10);
                         const pass = await bcrypt.hash(newPass, enc);
                         const uperson = await userService.updatePasswordByUsername(person.username, pass);
-                        res.status(200).send(uperson);
+                        res.status(200).send({good:"password cghanged"});
+                    }else {
+                        res.status(220).send({error: "wrong password"});
                     }
-                    res.status(220).send({error: "wrong password"});
                 });
 
             } else {
