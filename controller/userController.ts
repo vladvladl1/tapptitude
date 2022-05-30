@@ -60,6 +60,7 @@ export const changePassword = async (req, res) => {
                     }
                     res.status(220).send({error: "wrong password"});
                 });
+                res.status(220).send({error: "wrong password"});
             } else {
                 console.log("ajunge aici");
                 res.status(220).send({error: "wrong data"});
